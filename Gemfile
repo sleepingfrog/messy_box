@@ -50,3 +50,4 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'annotate', group: :development
 gem 'marginalia'
+gem 'rubocop', group: :development
