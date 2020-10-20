@@ -54,3 +54,7 @@ gem 'marginalia'
 gem 'rubocop', group: :development
 
 gem "devise", "~> 4.7"
+gem 'view_component', require: 'view_component/engine'
+gem 'trailblazer-cells'
+gem 'cells-erb'
+gem 'cells-rails'
