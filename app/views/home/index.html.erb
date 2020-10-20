@@ -1,2 +1,14 @@
 <h1>Home#index</h1>
 <p>Find me in app/views/home/index.html.erb</p>
+
+<% if user_signed_in? %>
+  <div>
+    <%= render(UserNameComponent.new(user: current_user)) %>
+  </div>
+  <div>
+    <%= render(partial: 'shared/user/name', locals: { user: current_user }) %>
+  </div>
+  <div>
+    <%= cell(User::Cell::Name, current_user) %>
+  </div>
+<% end %>
