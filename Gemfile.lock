@@ -105,6 +105,11 @@ GEM
     erbse (0.1.4)
       temple
     erubi (1.9.0)
+    factory_bot (6.1.0)
+      activesupport (>= 5.0.0)
+    factory_bot_rails (6.1.0)
+      factory_bot (~> 6.1.0)
+      railties (>= 5.0.0)
     ffi (1.13.1)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
@@ -272,6 +277,7 @@ DEPENDENCIES
   cells-erb
   cells-rails
   devise (~> 4.7)
+  factory_bot_rails (~> 6.1)
   graphiql-rails
   graphql (~> 1.11)
   jbuilder (~> 2.7)
