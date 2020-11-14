@@ -62,3 +62,5 @@ gem 'benchmark-ips', group: :development
 gem 'benchmark-memory', group: :development
 
 gem "graphql", "~> 1.11"
+
+gem 'graphiql-rails', group: :development
