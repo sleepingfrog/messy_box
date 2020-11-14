@@ -23,5 +23,5 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
-  has_many :todos, class_name: 'UserTodo'
+  has_many :todos, ->{ order(position: :asc) }, class_name: 'UserTodo', inverse_of: :user
 end
