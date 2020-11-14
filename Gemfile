@@ -60,3 +60,5 @@ gem 'cells-erb'
 gem 'cells-rails'
 gem 'benchmark-ips', group: :development
 gem 'benchmark-memory', group: :development
+
+gem "graphql", "~> 1.11"
