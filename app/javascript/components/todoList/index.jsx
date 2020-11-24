@@ -11,17 +11,21 @@ const Provider = ({ children }) => (
 
 const TodoList = () => (
   <Query query={TodoQuery}>
-  {({ data, loading }) => (
-      <div>
-        {loading
-          ? 'loading...'
-          : data.userTodos.map(({ id, content }) => (
-              <div key={id}>
-                <p>{content}</p>
-              </div>
-            ))}
-      </div>
-  )}
+    {({ data, loading, refetch }) => (
+        <>
+          <button onClick={() => refetch()}>refetch!</button>
+          <div>
+            {loading
+              ? 'loading...'
+              : data.userTodos.map(({ id, content }) => (
+                  <div key={id}>
+                    <p>{content}</p>
+                  </div>
+                ))}
+          </div>
+        </>
+      )
+    }
   </Query>
 )
 
