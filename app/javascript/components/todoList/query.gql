@@ -1,0 +1,6 @@
+query TodoQuery {
+  userTodos {
+    id
+    content
+  }
+}

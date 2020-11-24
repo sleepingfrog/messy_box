@@ -1,22 +1,13 @@
 import React from 'react';
 import { createCache, createClient } from '../../utils/apollo';
 import { ApolloProvider, Query } from 'react-apollo';
-import gql from 'graphql-tag';
+import { TodoQuery } from './query.gql'
 
 const Provider = ({ children }) => (
   <ApolloProvider client={createClient(createCache())} >
     {children}
   </ApolloProvider>
 )
-
-const TodoQuery = gql`
- {
-   userTodos {
-     id
-     content
-   }
- }
-`
 
 const TodoList = () => (
   <Query query={TodoQuery}>
