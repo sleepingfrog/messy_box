@@ -14,5 +14,9 @@ module Mutations
         { todo: nil, errors: todo.errors.full_messages }
       end
     end
+
+    def self.authorized?(object, context)
+      super && context[:current_user].present?
+    end
   end
 end
