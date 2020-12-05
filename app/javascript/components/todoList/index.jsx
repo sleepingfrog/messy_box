@@ -22,20 +22,20 @@ const TodoForm = ({
   }
   return(
     <div>
-      { loading
-        ? ('creating...')
-        : (
-          <form onSubmit={onSubmit}>
-            <input
-              type='text'
-              placeholder='todo content'
-              value={content}
-              onChange={e => setContent(e.currentTarget.value)}
-            />
-            <button type='submit'>add todo</button>
-          </form>
-        )
-      }
+      <form onSubmit={onSubmit}>
+        <input
+          type='text'
+          placeholder='todo content'
+          value={content}
+          onChange={e => setContent(e.currentTarget.value)}
+        />
+        { loading
+            ? 'creating..'
+            : (
+              <button type='submit'>add todo</button>
+            )
+        }
+      </form>
     </div>
   )
 }
