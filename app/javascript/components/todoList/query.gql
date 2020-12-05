@@ -4,3 +4,13 @@ query TodoQuery {
     content
   }
 }
+
+mutation AddTodo($input: CreateTodoInput!) {
+  createTodo(input: $input) {
+    todo {
+      id
+      content
+      position
+    }
+  }
+}

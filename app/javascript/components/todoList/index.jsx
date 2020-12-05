@@ -1,12 +1,72 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { createCache, createClient } from '../../utils/apollo';
-import { ApolloProvider, Query } from 'react-apollo';
-import { TodoQuery } from './query.gql'
+import { ApolloProvider, Query, Mutation } from 'react-apollo';
+import { TodoQuery, AddTodo } from './query.gql'
 
 const Provider = ({ children }) => (
   <ApolloProvider client={createClient(createCache())} >
     {children}
   </ApolloProvider>
+)
+
+const TodoForm = ({
+  initialContent='',
+  loading,
+  addTodo
+}) => {
+  const [content, setContent] = useState(initialContent);
+  const onSubmit = (event) => {
+    addTodo({content});
+    setContent('');
+    event.preventDefault();
+  }
+  return(
+    <div>
+      { loading
+        ? ('creating...')
+        : (
+          <form onSubmit={onSubmit}>
+            <input
+              type='text'
+              placeholder='todo content'
+              value={content}
+              onChange={e => setContent(e.currentTarget.value)}
+            />
+            <button type='submit'>add todo</button>
+          </form>
+        )
+      }
+    </div>
+  )
+}
+
+const AddTodoForm = () => (
+  <Mutation mutation={AddTodo}>
+    {(addTodo, {loading}) => (
+      <TodoForm
+        loading={loading}
+        addTodo={({content}) =>
+          addTodo({
+            variables: {
+              input: { content }
+            },
+            update: (cache, { data: { createTodo } }) => {
+              const todo = createTodo.todo;
+              if (todo) {
+                const currentTodos = cache.readQuery({ query: TodoQuery });
+                cache.writeQuery({
+                  query: TodoQuery,
+                  data: {
+                    userTodos: [...currentTodos.userTodos, todo],
+                  }
+                })
+              }
+            }
+          })
+        }
+      />
+    )}
+  </Mutation>
 )
 
 const TodoList = () => (
@@ -32,6 +92,7 @@ const TodoList = () => (
 export default () => {
   return(
     <Provider>
+      <AddTodoForm />
       <TodoList />
     </Provider>
   )
