@@ -14,3 +14,10 @@ mutation AddTodo($input: CreateTodoInput!) {
     }
   }
 }
+
+mutation DeleteTodo($input: DeleteTodoInput!) {
+  deleteTodo(input: $input) {
+    status
+    errors
+  }
+}

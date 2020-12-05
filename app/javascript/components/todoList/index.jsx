@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { createCache, createClient } from '../../utils/apollo';
 import { ApolloProvider, Query, Mutation } from 'react-apollo';
-import { TodoQuery, AddTodo } from './query.gql'
+import { TodoQuery, AddTodo, DeleteTodo } from './query.gql'
 
 const Provider = ({ children }) => (
   <ApolloProvider client={createClient(createCache())} >
@@ -69,21 +69,46 @@ const AddTodoForm = () => (
   </Mutation>
 )
 
+const Todo = ({id, content}) => {
+  return(
+    <Mutation mutation={DeleteTodo}>
+    {(deleteTodo, {loading}) => (
+      <div>
+        <p>
+          <span>{content}</span>
+          <button onClick={
+            e => deleteTodo({
+              variables: { input: { id }},
+              update: (cache, { data: { deleteTodo } }) => {
+                const status = deleteTodo.status;
+                if (status === 'success') {
+                  const currentTodos = cache.readQuery({ query: TodoQuery });
+                  cache.writeQuery({
+                    query: TodoQuery,
+                    data: {
+                      userTodos: currentTodos.userTodos.filter( item => (item.id != id ))
+                    }
+                  })
+                }
+              }
+            })}
+            >x</button>
+        </p>
+      </div>
+    ) }
+    </Mutation>
+  )
+}
 const TodoList = () => (
   <Query query={TodoQuery}>
-    {({ data, loading, refetch }) => (
-        <>
-          <button onClick={() => refetch()}>refetch!</button>
-          <div>
-            {loading
-              ? 'loading...'
-              : data.userTodos.map(({ id, content }) => (
-                  <div key={id}>
-                    <p>{content}</p>
-                  </div>
-                ))}
-          </div>
-        </>
+    {({ data, loading}) => (
+      <div>
+        {loading
+          ? 'loading...'
+          : data.userTodos.map(({ id, content }) => (
+              <Todo key={id} id={id} content={content} />
+            ))}
+      </div>
       )
     }
   </Query>
