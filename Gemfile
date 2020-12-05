@@ -65,3 +65,5 @@ gem 'benchmark-memory', group: :development
 gem "graphql", "~> 1.11"
 
 gem 'graphiql-rails', group: :development
+
+gem "minitest-reporters", "~> 1.4", group: :test
