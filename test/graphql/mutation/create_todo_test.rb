@@ -2,7 +2,7 @@ require 'test_helper'
 
 class GraphqlMutationCreateTodoTest < ActiveSupport::TestCase
   setup do
-    @user = create(:user)
+    @user = create(:user, :with_todos)
     @query = <<~QUERY
       mutation createTodo($input: CreateTodoInput!){
         createTodo(input: $input){

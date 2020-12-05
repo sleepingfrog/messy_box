@@ -57,7 +57,7 @@ const AddTodoForm = () => (
                 cache.writeQuery({
                   query: TodoQuery,
                   data: {
-                    userTodos: [...currentTodos.userTodos, todo],
+                    userTodos: [todo, ...currentTodos.userTodos],
                   }
                 })
               }
