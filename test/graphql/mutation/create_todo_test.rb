@@ -31,7 +31,7 @@ class GraphqlMutationCreateTodoTest < ActiveSupport::TestCase
   end
 
   test 'content blank' do
-    variables = { input: { content: nil } }
+    variables = { input: { content: '' } }
     result = nil
 
     assert_no_difference('UserTodo.count') do
@@ -39,5 +39,7 @@ class GraphqlMutationCreateTodoTest < ActiveSupport::TestCase
         result = MessyBoxSchema.execute(@query, context: { current_user: User.find(@user.id) }, variables: variables)
       end
     end
+
+    assert result.dig('data', 'createTodo', 'errors').present?
   end
 end
