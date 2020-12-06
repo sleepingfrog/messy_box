@@ -27,6 +27,7 @@ gem 'bootsnap', '>= 1.4.2', require: false
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+  gem "factory_bot_rails", "~> 6.1"
 end
 
 group :development do
@@ -60,3 +61,9 @@ gem 'cells-erb'
 gem 'cells-rails'
 gem 'benchmark-ips', group: :development
 gem 'benchmark-memory', group: :development
+
+gem "graphql", "~> 1.11"
+
+gem 'graphiql-rails', group: :development
+
+gem "minitest-reporters", "~> 1.4", group: :test

@@ -1,0 +1,23 @@
+query TodoQuery {
+  userTodos {
+    id
+    content
+  }
+}
+
+mutation AddTodo($input: CreateTodoInput!) {
+  createTodo(input: $input) {
+    todo {
+      id
+      content
+      position
+    }
+  }
+}
+
+mutation DeleteTodo($input: DeleteTodoInput!) {
+  deleteTodo(input: $input) {
+    status
+    errors
+  }
+}
