@@ -37,6 +37,11 @@ group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
+  gem 'annotate'
+  gem 'rubocop'
+  gem 'benchmark-ips'
+  gem 'benchmark-memory'
+  gem 'graphiql-rails'
 end
 
 group :test do
@@ -45,25 +50,16 @@ group :test do
   gem 'selenium-webdriver'
   # Easy installation and use of web drivers to run system tests with browsers
   gem 'webdrivers'
+  gem "minitest-reporters", "~> 1.4"
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
-gem 'annotate', group: :development
 gem 'marginalia'
-gem 'rubocop', group: :development
-
 gem "devise", "~> 4.7"
 gem 'view_component', require: 'view_component/engine'
 gem 'trailblazer-cells'
 gem 'cells-erb'
 gem 'cells-rails'
-gem 'benchmark-ips', group: :development
-gem 'benchmark-memory', group: :development
-
 gem "graphql", "~> 1.11"
-
-gem 'graphiql-rails', group: :development
-
-gem "minitest-reporters", "~> 1.4", group: :test
