@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class MessyBoxSchema < GraphQL::Schema
   mutation(Types::MutationType)
   query(Types::QueryType)

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Mutations
   class DeleteTodo < BaseMutation
     field :status, String, null: false

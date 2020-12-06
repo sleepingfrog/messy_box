@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class UserNameComponent < ViewComponent::Base
   with_collection_parameter :user
 
