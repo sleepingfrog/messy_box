@@ -6,6 +6,6 @@ class UserCellNameTest < ActiveSupport::TestCase
     result = User::Cell::Name.call(user).call
     doc = Nokogiri::HTML(result)
 
-    assert_includes doc.css('div span').to_html, user.name
+    assert_includes(doc.css('div span').to_html, user.name)
   end
 end

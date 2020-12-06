@@ -9,7 +9,7 @@ module Mutations
       last_position = context[:current_user].todos.first&.position || 0
       todo = context[:current_user].todos.build(content: content, position: last_position + 1)
       if todo.save
-        { todo: todo, errors: [], }
+        { todo: todo, errors: [] }
       else
         { todo: nil, errors: todo.errors.full_messages }
       end

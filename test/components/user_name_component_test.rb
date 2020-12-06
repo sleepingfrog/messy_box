@@ -5,6 +5,6 @@ class UserNameComponentTest < ViewComponent::TestCase
     user = User.new(name: 'user1')
     result = render_inline(UserNameComponent.new(user: user))
 
-    assert_includes result.css('div span').to_html, user.name
+    assert_includes(result.css('div span').to_html, user.name)
   end
 end

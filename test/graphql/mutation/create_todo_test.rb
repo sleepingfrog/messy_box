@@ -4,16 +4,16 @@ class GraphqlMutationCreateTodoTest < ActiveSupport::TestCase
   setup do
     @user = create(:user, :with_todos)
     @query = <<~QUERY
-      mutation createTodo($input: CreateTodoInput!){
-        createTodo(input: $input){
-          todo {
-            id
-            content
-            position
-          }
-          errors
-        }
-     }
+       mutation createTodo($input: CreateTodoInput!){
+         createTodo(input: $input){
+           todo {
+             id
+             content
+             position
+           }
+           errors
+         }
+      }
     QUERY
   end
 

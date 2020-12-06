@@ -9,7 +9,7 @@ module Mutations
       todo = context[:current_user].todos.find(id)
 
       if todo.destroy
-        { status: 'success', errors: []}
+        { status: 'success', errors: [] }
       else
         { status: 'failure', errors: todo.errors.full_messages }
       end
