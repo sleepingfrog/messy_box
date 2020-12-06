@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Types
   class UserTodoType < Types::BaseObject
     field :id, ID, null: false

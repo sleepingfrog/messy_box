@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Types
   class QueryType < Types::BaseObject
     field :user_todos, [Types::UserTodoType], null: true
