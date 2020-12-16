@@ -35,8 +35,11 @@ x-backend: &backend
     HISTFILE: /app/log/.bash_history
     PSQL_HISTFILE: /app/log/.psql_history
     EDITOR: vi
+    SELENIUM_HOST: selenium
   depends_on:
     - postgres
+    - redis
+    - selenium
 
 services:
   runner:
@@ -92,6 +95,13 @@ services:
       interval: 1s
       timeout: 3s
       retries: 30
+
+  selenium:
+    image: selenium/standalone-firefox:83.0
+    ports:
+      - 4444:4444
+    volumes:
+      - /dev/shm:/dev/shm
 
 volumes:
   bundle:
