@@ -35,7 +35,8 @@ x-backend: &backend
     HISTFILE: /app/log/.bash_history
     PSQL_HISTFILE: /app/log/.psql_history
     EDITOR: vi
-    SELENIUM_HOST: selenium
+    SELENIUM_URL: http://selenium:4444/wd/hub
+    REDIS_URL: redis://redis:6379
   depends_on:
     - postgres
     - redis
@@ -102,6 +103,10 @@ services:
       - 4444:4444
     volumes:
       - /dev/shm:/dev/shm
+
+  sidekiq:
+    <<: *backend
+    command: bundle exec sidekiq -C config/sidekiq.yml
 
 volumes:
   bundle:

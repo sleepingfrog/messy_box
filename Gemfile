@@ -63,3 +63,4 @@ gem 'cells-erb'
 gem 'cells-rails'
 gem "graphql", "~> 1.11"
 gem 'selenium-webdriver'
+gem 'sidekiq'

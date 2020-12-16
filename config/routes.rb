@@ -1,4 +1,6 @@
 # frozen_string_literal: true
+require 'sidekiq/web'
+
 Rails.application.routes.draw do
   namespace :users do
     resources :todos, only: [:index]
@@ -11,4 +13,8 @@ Rails.application.routes.draw do
   root 'home#index'
 
   get 'view_component_sample/index'
+
+  if Rails.env.development?
+    mount Sidekiq::Web, at: '/sidekiq'
+  end
 end
