@@ -6,5 +6,9 @@ module Types
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
     field :tags, [Types::TagType], null: true
+
+    def tags
+      Loaders::AssociationLoader.for(Article, :tags).load(object)
+    end
   end
 end

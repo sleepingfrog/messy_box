@@ -67,3 +67,5 @@ gem "graphql", "~> 1.11"
 gem "elasticsearch-model", "~> 7.1"
 
 gem "elasticsearch-rails", "~> 7.1"
+
+gem "graphql-batch", "~> 0.4.3"
