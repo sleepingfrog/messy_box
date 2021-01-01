@@ -9,4 +9,5 @@
 #  updated_at :datetime         not null
 #
 class Article < ApplicationRecord
+  has_and_belongs_to_many :tags
 end
