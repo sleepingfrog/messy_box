@@ -16,7 +16,7 @@ class ElasticsearchRepository
   end
 
   def fetch
-    Article.__elasticsearch__.search(build_query)
+    model.__elasticsearch__.search(build_query)
   end
 
   def array
