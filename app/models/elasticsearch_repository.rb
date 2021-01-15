@@ -1,10 +1,11 @@
 class ElasticsearchRepository
-  attr_reader :model
+  attr_reader :model, :query
   attr_accessor :size, :from
 
-  def initialize(model)
+  def initialize(model, query = nil)
     @model = model
     @from = 0
+    @query = query
   end
 
   def each(&block)
@@ -16,7 +17,7 @@ class ElasticsearchRepository
   end
 
   def fetch
-    model.__elasticsearch__.search(build_query)
+    model.__elasticsearch__.search(build_request)
   end
 
   def array
@@ -29,19 +30,27 @@ class ElasticsearchRepository
 
   private
 
-    def build_query
-      query = {
-        query: {
-          match_all: {}
+    def build_request
+      if query.blank?
+        request = {
+          query: {
+            match_all: {}
+          }
         }
-      }
+      else
+        request = {
+          query: query
+        }
+      end
 
       if size
-        query = query.merge({ size: size })
+        request = request.merge({ size: size })
       end
 
       if from
-        query = query.merge({ from: from })
+        request = request.merge({ from: from })
       end
+
+      request
     end
 end
