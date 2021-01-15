@@ -25,7 +25,7 @@ class ElasticsearchRepository
   end
 
   def total_count
-    es_result.response.dig('hits', 'total', 'value')
+    fetch.response.dig('hits', 'total', 'value')
   end
 
   private
