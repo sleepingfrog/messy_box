@@ -9,7 +9,7 @@ module Types
     end
 
     def articles
-      Article.all
+      ElasticsearchRepository.new(Article)
     end
   end
 end

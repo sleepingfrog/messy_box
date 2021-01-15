@@ -11,4 +11,6 @@ class MessyBoxSchema < GraphQL::Schema
   use GraphQL::Pagination::Connections
 
   use GraphQL::Batch
+
+  connections.add(ElasticsearchRepository, Connections::ElasticsearchConnection)
 end
