@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+FFaker::Random.seed = 12345
+random = Random.new(12345)
+
 def print_seed(message)
   puts message
   yield
@@ -18,27 +21,13 @@ print_seed('todo seed') do
 end
 
 print_seed('article') do
-  a = Article.new(title: 'Title1', body: 'body1' * 10)
-  a.tags << Tag.find_or_create_by(name: 'tag1')
-  a.tags << Tag.find_or_create_by(name: 'tag2')
-  a.tags << Tag.find_or_create_by(name: 'tag3')
-  a.tags << Tag.find_or_create_by(name: 'tag4')
-  a.tags << Tag.find_or_create_by(name: 'tag5')
-  a.save!
-
-  a = Article.new(title: 'Title2', body: 'body2' * 10)
-  a.tags << Tag.find_or_create_by(name: 'tag1')
-  a.tags << Tag.find_or_create_by(name: 'tag2')
-  a.tags << Tag.find_or_create_by(name: 'tag3')
-  a.save!
-
-  a = Article.new(title: 'Title2', body: 'body2' * 10)
-  a.tags << Tag.find_or_create_by(name: 'tag1')
-  a.tags << Tag.find_or_create_by(name: 'tag2')
-  a.tags << Tag.find_or_create_by(name: 'tag3')
-  a.tags << Tag.find_or_create_by(name: 'tag4')
-  a.tags << Tag.find_or_create_by(name: 'tag5')
-  a.save!
+  1.upto(20) do |i|
+    a = Article.new(title: "Title#{i}", body: FFaker::LoremJA.paragraph)
+    1.upto(random.rand(5)) do
+      a.tags << Tag.find_or_create_by(name: FFaker::JobJA.title)
+    end
+    a.save!
+  end
 
   Article.create_index!
   Article.__elasticsearch__.import

@@ -129,6 +129,7 @@ GEM
       multipart-post (>= 1.2, < 3)
       ruby2_keywords
     faraday-net_http (1.0.0)
+    ffaker (2.17.0)
     ffi (1.13.1)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
@@ -312,6 +313,7 @@ DEPENDENCIES
   elasticsearch-model (~> 7.1)
   elasticsearch-rails (~> 7.1)
   factory_bot_rails (~> 6.1)
+  ffaker
   graphiql-rails
   graphql (~> 1.11)
   graphql-batch (~> 0.4.3)
