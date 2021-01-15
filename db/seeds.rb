@@ -39,4 +39,7 @@ print_seed('article') do
   a.tags << Tag.find_or_create_by(name: 'tag4')
   a.tags << Tag.find_or_create_by(name: 'tag5')
   a.save!
+
+  Article.create_index!
+  Article.__elasticsearch__.import
 end
