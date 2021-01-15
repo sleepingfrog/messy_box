@@ -31,6 +31,10 @@ module Connections
       end
     end
 
+    def total_count
+      sliced_nodes.total_count
+    end
+
     private
 
       def paged_nodes
