@@ -1,11 +1,11 @@
 class ElasticsearchRepository
   attr_reader :model
   attr_accessor :size, :from
+
   def initialize(model)
     @model = model
     @from = 0
   end
-
 
   def each(&block)
     array.each(&block)
@@ -44,5 +44,4 @@ class ElasticsearchRepository
         query = query.merge({ from: from })
       end
     end
-
 end
