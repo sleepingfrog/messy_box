@@ -32,7 +32,7 @@ module Connections
     end
 
     def total_count
-      paged_nodes.total_count
+      sliced_nodes.total_count
     end
 
     private
