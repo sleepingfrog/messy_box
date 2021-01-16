@@ -72,7 +72,7 @@ interaction:
 
 provision:
   - dip compose down --volumes
-  - dip compose up -d postgres redis
+  - dip compose up -d postgres redis es
   - dip bundle install
   - dip yarn install
   - dip rake ar_log db:setup
