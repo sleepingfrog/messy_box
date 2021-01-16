@@ -30,5 +30,5 @@ print_seed('article') do
   end
 
   Article.create_index!
-  Article.__elasticsearch__.import
+  Article.__elasticsearch__.import scope: :with_tags
 end

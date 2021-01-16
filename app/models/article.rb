@@ -13,6 +13,8 @@ class Article < ApplicationRecord
 
   has_and_belongs_to_many :tags
 
+  scope :with_tags, ->() { preload(:tags) }
+
   index_name "es_article_#{Rails.env}"
 
   settings do
