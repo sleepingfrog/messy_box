@@ -11,20 +11,20 @@ module Connections
     end
 
     def has_next_page
-      es_total = sliced_nodes.total_count
+      es_total = total_count
 
-      if es_total && sliced_nodes.from.present? && sliced_nodes.size.present?
-        return (sliced_nodes.from + sliced_nodes.size) < es_total
+      if es_total && paged_nodes.from.present? && paged_nodes.size.present?
+        return (paged_nodes.from + paged_nodes.size) < es_total
       else
         return false
       end
     end
 
     def has_previous_page
-      es_total = sliced_nodes.total_count
+      es_total = total_count
 
-      if es_total && sliced_nodes.from.present? && sliced_nodes.size.present?
-        from_cursor = sliced_nodes.from - sliced_nodes.size
+      if es_total && paged_nodes.from.present? && paged_nodes.size.present?
+        from_cursor = paged_nodes.from - paged_nodes.size
         return 0 <= from_cursor && from_cursor <= es_total
       else
         return false
@@ -32,7 +32,7 @@ module Connections
     end
 
     def total_count
-      sliced_nodes.total_count
+      @total_count ||= sliced_nodes.total_count
     end
 
     private
@@ -54,7 +54,6 @@ module Connections
               items.size = last
             end
           else
-            total_count = items.total_count
             from = items.from + total_count  - [last, total_count].min
             items.from = from
             items.size = last
