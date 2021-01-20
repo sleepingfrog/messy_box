@@ -6,5 +6,16 @@ module Types
     def total_count
       object.total_count
     end
+
+    class Facet < Types::BaseObject
+      field :key, String, null: false
+      field :count, Int, null: false
+    end
+
+    field :facets, [Facet], null: false
+
+    def facets
+      object.facets
+    end
   end
 end

@@ -28,6 +28,15 @@ class ElasticsearchRepository
     fetch.response.dig('hits', 'total', 'value')
   end
 
+  def facets
+    fetch.response.dig('aggregations', 'tags', 'buckets').each_with_object([]).map do |bucket|
+      {
+        key: bucket['key'],
+        count: bucket['doc_count']
+      }
+    end
+  end
+
   private
 
     def build_request
@@ -50,6 +59,17 @@ class ElasticsearchRepository
       if from
         request = request.merge({ from: from })
       end
+
+      request = request.merge({
+        aggs: {
+          tags: {
+            terms: {
+              field: 'tags.name',
+              size: 10,
+            },
+          }
+        }
+      })
 
       request
     end

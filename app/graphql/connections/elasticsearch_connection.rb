@@ -35,6 +35,10 @@ module Connections
       @total_count ||= sliced_nodes.total_count
     end
 
+    def facets
+      @facets ||= sliced_nodes.facets
+    end
+
     private
 
       def paged_nodes
