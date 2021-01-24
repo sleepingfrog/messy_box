@@ -4,6 +4,7 @@ import { ApolloProvider, useQuery, gql  } from '@apollo/client';
 import Tag from './tag'
 import Article from './article'
 import Facet from './facet'
+import QueryTag from './query_tag'
 
 const Provider = ({ children }) => (
   <ApolloProvider client={createClient(createCache())}>
@@ -34,10 +35,12 @@ const ARTICLE_QUERY = gql`
 const ArticleList = () => {
   const [inputText, setInputText] = useState('');
   const [queryText, setQueryText] = useState('');
+  const [queryTags, setQueryTags] = useState([]);
   const { loading, error, data, refetch } = useQuery(ARTICLE_QUERY, {
     variables: {
       query: {
-        value: queryText
+        value: queryText,
+        tags: queryTags
       }
     }
   });
@@ -52,13 +55,21 @@ const ArticleList = () => {
     e.preventDefault();
   }
 
+  const facetOnClick = (event, name) => {
+    setQueryTags([...(new Set([...queryTags, name]))]);
+  }
+
+  const queryTagOnClick = (event, name) => {
+    setQueryTags([...queryTags.filter(tag_name => tag_name !== name)]);
+  }
+
   const renderList = () => {
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error</p>;
     return(
       <>
         <span>とーたる: {data.articles.totalCount}件</span>
-      　{data.articles.facets.map( ({key, count}, index) => <Facet key={index} name={key} count={count} /> )}
+      　{data.articles.facets.map( ({key, count}, index) => <Facet key={index} name={key} count={count} onClick={facetOnClick} /> )}
         {data.articles.nodes.map( node => <Article key={node.id} {...node} /> )}
       </>
     )
@@ -68,6 +79,9 @@ const ArticleList = () => {
     <div>
       <form onSubmit={onSubmit}>
         <input type='text' value={inputText} onChange={onChange}/>
+        <ul>
+          {queryTags.map((tag_name, index) => <QueryTag key={index} name={tag_name} onClick={queryTagOnClick} />)}
+        </ul>
       </form>
       {renderList()}
     </div>

@@ -1,5 +1,5 @@
 import React from 'react';
 
-export default ({name, count}) => (
-  <label>{name}({count})</label>
+export default ({name, count, onClick}) => (
+  <label onClick={e => onClick(e, name)}>{name}({count})</label>
 )
