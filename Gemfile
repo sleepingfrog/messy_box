@@ -28,6 +28,7 @@ group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem "factory_bot_rails", "~> 6.1"
+  gem 'ffaker'
 end
 
 group :development do
@@ -63,3 +64,9 @@ gem 'trailblazer-cells'
 gem 'cells-erb'
 gem 'cells-rails'
 gem "graphql", "~> 1.11"
+
+gem "elasticsearch-model", "~> 7.1"
+
+gem "elasticsearch-rails", "~> 7.1"
+
+gem "graphql-batch", "~> 0.4.3"

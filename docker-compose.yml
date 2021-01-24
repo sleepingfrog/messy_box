@@ -35,8 +35,11 @@ x-backend: &backend
     HISTFILE: /app/log/.bash_history
     PSQL_HISTFILE: /app/log/.psql_history
     EDITOR: vi
+    ELASTICSEARCH_HOST: es
+    ELASTICSEARCH_PORT: 9200
   depends_on:
     - postgres
+    - es
 
 services:
   runner:
@@ -93,6 +96,26 @@ services:
       timeout: 3s
       retries: 30
 
+  es:
+    build:
+      context: .
+      dockerfile: ./.dockerdev/es/Dockerfile
+    environment:
+      - node.name=es01
+      - cluster.name=es-sample-cluster
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms400m -Xmx400m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - es:/usr/share/elasticsearch/data
+    ports:
+      - 127.0.0.1:9200:9200
+    healthcheck:
+      test: curl -s http://localhost:9200/_cluster/health | grep -vq '"status":"red"'
+
 volumes:
   bundle:
   node_modules:
@@ -100,3 +123,4 @@ volumes:
   postgres:
   rails_cache:
   redis:
+  es:

@@ -3,6 +3,9 @@ Rails.application.routes.draw do
   namespace :users do
     resources :todos, only: [:index]
   end
+
+  resources :articles, only: [:index]
+
   if Rails.env.development?
     mount GraphiQL::Rails::Engine, at: "/graphiql", graphql_path: "/graphql"
   end
