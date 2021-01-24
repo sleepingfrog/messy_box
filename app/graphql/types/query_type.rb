@@ -11,7 +11,7 @@ module Types
     end
 
     def articles(query: nil)
-      value_query = if query.value.present?
+      value_query = if query&.value.present?
                 {
                   multi_match: {
                     fields: ['title', 'body'],
@@ -22,7 +22,7 @@ module Types
                 }
               end
 
-      tags_query = if query.tags.present?
+      tags_query = if query&.tags.present?
                      {
                        terms: {
                          'tags.name': query.tags
