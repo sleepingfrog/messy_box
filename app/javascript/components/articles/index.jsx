@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { createCache, createClient } from '../../utils/apollo';
 import { ApolloProvider, useQuery, gql  } from '@apollo/client';
+import Tag from './tag'
+import Article from './article'
+import Facet from './facet'
 
 const Provider = ({ children }) => (
   <ApolloProvider client={createClient(createCache())}>
@@ -27,28 +30,6 @@ const ARTICLE_QUERY = gql`
     }
   }
  `;
-
-const Article = ({id, title, body, tags}) => {
-  return(
-    <div key={id}>
-      <p><span>{title}</span></p>
-      {tags.map(({name}, index) => <Tag key={index} name={name} />)}
-      <p>{body}</p>
-    </div>
-  )
-}
-
-const Tag = ({name}) => (
-  <div>
-    <span>{name}</span>
-  </div>
-)
-
-const Facet = ({facet}) => {
-  return(
-    <label>{facet.key}({facet.count})</label>
-  )
-}
 
 const ArticleList = () => {
   const [inputText, setInputText] = useState('');
@@ -77,7 +58,7 @@ const ArticleList = () => {
     return(
       <>
         <span>とーたる: {data.articles.totalCount}件</span>
-      　{data.articles.facets.map( (facet, index) => <Facet key={index} facet={facet} /> )}
+      　{data.articles.facets.map( ({key, count}, index) => <Facet key={index} name={key} count={count} /> )}
         {data.articles.nodes.map( node => <Article key={node.id} {...node} /> )}
       </>
     )
