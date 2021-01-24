@@ -21,7 +21,7 @@ print_seed('todo seed') do
 end
 
 print_seed('article') do
-  1.upto(20) do |i|
+  1.upto(200) do |i|
     a = Article.new(title: "Title#{i}", body: FFaker::LoremJA.paragraph)
     1.upto(random.rand(5)) do
       a.tags << Tag.find_or_create_by(name: FFaker::JobJA.title)

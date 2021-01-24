@@ -75,4 +75,4 @@ provision:
   - dip compose up -d postgres redis es
   - dip bundle install
   - dip yarn install
-  - dip rake ar_log db:setup
+  - dip rake db:setup
