@@ -68,7 +68,7 @@ const ArticleList = () => {
       return(
         <ul>
           {queryTags.map((tag_name, index) => (
-            <li>
+            <li key={index}>
               <QueryTag key={index} name={tag_name} onClick={queryTagOnClick} />
             </li>
           ))}
