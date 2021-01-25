@@ -5,6 +5,7 @@ module Types
     field :articles, Types::ArticleConnectionWithTotalCountType, null: true, connection: true do
       argument :query, Types::ArticleQueryType, required: false
     end
+    field :tags, [Types::TagType], null: false
 
     def user_todos
       context[:current_user]&.todos
@@ -37,6 +38,10 @@ module Types
       }
 
       ElasticsearchRepository.new(Article, query)
+    end
+
+    def tags
+      Tag.all
     end
   end
 end
