@@ -63,6 +63,30 @@ const ArticleList = () => {
     setQueryTags([...queryTags.filter(tag_name => tag_name !== name)]);
   }
 
+  const renderQueryTags = () => {
+    if(queryTags.length > 0) {
+      return(
+        <ul>
+          {queryTags.map((tag_name, index) => (
+            <li>
+              <QueryTag key={index} name={tag_name} onClick={queryTagOnClick} />
+            </li>
+          ))}
+        </ul>
+      )
+    } else {
+      return null;
+    }
+  }
+
+  const renderForm = () => (
+    <form onSubmit={onSubmit}>
+        <input type='text' value={inputText} onChange={onChange}/>
+        <button type='submit'>search</button>
+        {renderQueryTags()}
+    </form>
+  )
+
   const renderList = () => {
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error</p>;
@@ -77,12 +101,7 @@ const ArticleList = () => {
 
   return(
     <div>
-      <form onSubmit={onSubmit}>
-        <input type='text' value={inputText} onChange={onChange}/>
-        <ul>
-          {queryTags.map((tag_name, index) => <QueryTag key={index} name={tag_name} onClick={queryTagOnClick} />)}
-        </ul>
-      </form>
+      {renderForm()}
       {renderList()}
     </div>
   )
