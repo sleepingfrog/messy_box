@@ -174,7 +174,7 @@ export default () => {
       <PageContext.Provider value={pageSetting}>
         <GridLayer />
         <ShadowLayer shadow={shadow} />
-        <FrameLayer frames={frames} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} handleDragMove={handleDragMove}/>
+        <FrameLayer {...{frames, handleDragStart, handleDragMove, handleDragEnd}} />
       </PageContext.Provider>
     </Stage>
   )
