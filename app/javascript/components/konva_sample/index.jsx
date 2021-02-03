@@ -34,6 +34,25 @@ const GridLayer = () => {
   )
 }
 
+const FrameLayer = ({frames}) => {
+  const page = useContext(PageContext);
+  const blockSize = {
+    width: page.width / page.xCount,
+    height: page.height / page.yCount,
+  }
+  const renderFrames = () => (
+    frames.map(({x, y, width, height, color}, index) => (
+      <Rect key={index} x={x * blockSize.width} y={y * blockSize.height} width={width * blockSize.width} height={height * blockSize.height} fill={color} />
+    ))
+  )
+
+  return(
+    <Layer>
+      {renderFrames()}
+    </Layer>
+  )
+}
+
 export default () => {
   const pageSetting = {
     width: 900,
@@ -42,10 +61,17 @@ export default () => {
     yCount: 8,
   }
 
+  const frames = [
+    { x: 0, y: 0, width: 1, height: 2, color: '#ffbbee' },
+    { x: 1, y: 3, width: 8, height: 2, color: '#123123' },
+    { x: 3, y: 1, width: 1, height: 3, color: '#FF0012' },
+  ]
+
   return(
     <Stage width={pageSetting.width} height={pageSetting.height}>
       <PageContext.Provider value={pageSetting}>
         <GridLayer />
+        <FrameLayer frames={frames} />
       </PageContext.Provider>
     </Stage>
   )
