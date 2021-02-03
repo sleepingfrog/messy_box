@@ -1,14 +1,52 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import ReactDOM from 'react-dom';
-import { Rect, Layer, Stage } from 'react-konva';
+import { Rect, Layer, Stage, Line } from 'react-konva';
+
+const PageContext = React.createContext({
+  width: 0,
+  height: 0,
+  xCount: 0,
+  yCount: 0,
+})
+
+const GridLayer = () => {
+  const {width, height, xCount, yCount} = useContext(PageContext);
+  const stroke = 'blue'
+
+  const renderGridLines = () => {
+    const horizontals = [...Array(xCount + 1)].map((n, index) => (
+      <Line key={"x" + index} points={[index * (width / xCount), 0, index * (width / xCount), height]} stroke={'red'}  strokeWidth={0.5}/>
+    ))
+    const verticals = [...Array(yCount + 1)].map((n, index) => (
+      <Line key={"y" + index} points={[0, index * (height / yCount), width, index * (height / yCount)]} stroke={'red'}  strokeWidth={0.5}/>
+    ))
+    return(
+      [
+        ...horizontals,
+        ...verticals,
+      ]
+    )
+  }
+  return(
+    <Layer>
+      {renderGridLines()}
+    </Layer>
+  )
+}
 
 export default () => {
+  const pageSetting = {
+    width: 900,
+    height: 300,
+    xCount: 12,
+    yCount: 8,
+  }
+
   return(
-    <Stage width={300} height={300} >
-      <Layer>
-        <Rect stroke='blue' strokeWidth={4} x={5} y={5} width={290} height={290} />
-        <Rect fill='112233' x={10} y={100} width={100} height={100} />
-      </Layer>
+    <Stage width={pageSetting.width} height={pageSetting.height}>
+      <PageContext.Provider value={pageSetting}>
+        <GridLayer />
+      </PageContext.Provider>
     </Stage>
   )
 }
