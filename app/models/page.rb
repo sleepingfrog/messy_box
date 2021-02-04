@@ -19,4 +19,11 @@
 #
 class Page < ApplicationRecord
   belongs_to :chapter
+
+  validates :number,
+    uniqueness: { scope: :chapter },
+    numericality: {
+      greater_than_or_equal_to: 1,
+      less_than_or_equal_to: lambda { |record| record.chapter.page_count }
+    }
 end
