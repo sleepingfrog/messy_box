@@ -22,5 +22,5 @@
 class Chapter < ApplicationRecord
   belongs_to :book
 
-  has_many :pages
+  has_many :pages, lambda { order(number: :asc) }, inverse_of: :chapter
 end
