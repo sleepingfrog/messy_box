@@ -14,4 +14,8 @@ Rails.application.routes.draw do
   root 'home#index'
 
   get 'view_component_sample/index'
+
+  namespace :konva_sample do
+    root action: :index
+  end
 end
