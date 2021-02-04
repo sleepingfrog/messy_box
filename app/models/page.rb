@@ -26,4 +26,18 @@ class Page < ApplicationRecord
       greater_than_or_equal_to: 1,
       less_than_or_equal_to: lambda { |record| record.chapter.page_count }
     }
+
+  scope :book_page_number, lambda { |numbers|
+    joins(:chapter).where(
+      (Chapter.arel_attribute(:page_offset) + Page.arel_attribute(:number)).in(numbers)
+    )
+  }
+
+  scope :find_by_book_page_number, lambda { |number|
+    book_page_number(number).first
+  }
+
+  def page_number
+    chapter.page_offset + number
+  end
 end
