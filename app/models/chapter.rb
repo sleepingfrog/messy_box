@@ -21,6 +21,8 @@
 #
 class Chapter < ApplicationRecord
   belongs_to :book
-
   has_many :pages, lambda { order(number: :asc) }, inverse_of: :chapter
+
+  validates :position, presence: true, uniqueness: { scope: :book }
+  validates :page_count, :page_offset, presence: true
 end
