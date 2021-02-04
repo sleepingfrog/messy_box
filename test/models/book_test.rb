@@ -1,0 +1,36 @@
+require 'test_helper'
+
+class BookTest < ActiveSupport::TestCase
+  test 'chapter_order' do
+    book = Book.new
+    book.chapters.build(position: 3, page_count: 1, page_offset: 2)
+    book.chapters.build(position: 1, page_count: 1, page_offset: 0)
+    book.chapters.build(position: 2, page_count: 1, page_offset: 1)
+    book.save!
+
+    assert_equal([1, 2, 3], book.chapters.map(&:position))
+  end
+
+  test 'page_order' do
+    book = Book.new
+    book.chapters.build(position: 3, page_count: 2, page_offset: 4).tap do |chapter|
+      chapter.pages.build(number: 2)
+      chapter.pages.build(number: 1)
+    end
+    book.chapters.build(position: 1, page_count: 2, page_offset: 0).tap do |chapter|
+      chapter.pages.build(number: 2)
+      chapter.pages.build(number: 1)
+    end
+    book.chapters.build(position: 2, page_count: 2, page_offset: 2).tap do |chapter|
+      chapter.pages.build(number: 2)
+      chapter.pages.build(number: 1)
+    end
+
+    book.save!
+
+    assert_equal(
+      [1, 2, 3, 4, 5, 6],
+      book.pages.map { |page| page.number + page.chapter.page_offset }
+    )
+  end
+end
