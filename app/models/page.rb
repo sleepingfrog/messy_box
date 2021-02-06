@@ -19,6 +19,7 @@
 #
 class Page < ApplicationRecord
   belongs_to :chapter
+  has_many :frames
 
   validates :number,
     uniqueness: { scope: :chapter },
