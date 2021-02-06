@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_06_191357) do
+ActiveRecord::Schema.define(version: 2021_02_06_191918) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -55,6 +55,21 @@ ActiveRecord::Schema.define(version: 2021_02_06_191357) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "frames", force: :cascade do |t|
+    t.bigint "frame_size_id", null: false
+    t.bigint "page_id"
+    t.bigint "book_id", null: false
+    t.integer "x"
+    t.integer "y"
+    t.text "text"
+    t.string "color"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["book_id"], name: "index_frames_on_book_id"
+    t.index ["frame_size_id"], name: "index_frames_on_frame_size_id"
+    t.index ["page_id"], name: "index_frames_on_page_id"
+  end
+
   create_table "pages", force: :cascade do |t|
     t.bigint "chapter_id", null: false
     t.integer "number"
@@ -95,6 +110,9 @@ ActiveRecord::Schema.define(version: 2021_02_06_191357) do
   end
 
   add_foreign_key "chapters", "books"
+  add_foreign_key "frames", "books"
+  add_foreign_key "frames", "frame_sizes"
+  add_foreign_key "frames", "pages"
   add_foreign_key "pages", "chapters"
   add_foreign_key "user_todos", "users"
 end
