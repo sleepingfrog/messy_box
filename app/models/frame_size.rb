@@ -1,0 +1,2 @@
+class FrameSize < ApplicationRecord
+end
