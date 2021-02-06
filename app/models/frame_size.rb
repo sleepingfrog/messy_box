@@ -10,5 +10,6 @@
 #  updated_at :datetime         not null
 #
 class FrameSize < ApplicationRecord
+  has_many :frames
   validates :width, :height, :name, presence: true
 end
