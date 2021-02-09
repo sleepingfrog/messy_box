@@ -7,6 +7,9 @@ module Types
     end
     field :tags, [Types::TagType], null: false
     field :books, Types::BookType.connection_type, null: true
+    field :book, Types::BookType, null: true do
+      argument :id, ID, required: true
+    end
 
     def user_todos
       context[:current_user]&.todos
@@ -47,6 +50,10 @@ module Types
 
     def books
       Book.all
+    end
+
+    def book(id:)
+      Book.find(id)
     end
   end
 end
