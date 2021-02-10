@@ -3,11 +3,15 @@ import { createCache, createClient } from '../../utils/apollo';
 import { ApolloProvider, useQuery, gql  } from '@apollo/client';
 
 const BOOKS_QUERY = gql`
-  query BookConnection($first: Int) {
-    books(first: $first) {
+  query BookConnection($first: Int, $cursor: String) {
+    books(first: $first, after: $cursor) {
       nodes {
         id
         title
+      }
+      pageInfo {
+        endCursor
+        hasNextPage
       }
     }
   }
@@ -20,12 +24,37 @@ const Provider = ({ children }) => (
 )
 
 const BookList = () => {
-  const { loading, error, data } = useQuery(BOOKS_QUERY, {
-    variables: { first: 10 }
+  const { loading, error, data, fetchMore } = useQuery(BOOKS_QUERY, {
+    variables: { first: 10 },
   });
+
+  const onFetchMore = (e) => {
+    if (data.books.pageInfo.hasNextPage) {
+      fetchMore({
+        variables: {
+          cursor: data.books.pageInfo.endCursor,
+        },
+        updateQuery: (prev, { fetchMoreResult }) => {
+          if (!fetchMoreResult) { return prev; }
+
+          return({
+            ...fetchMoreResult,
+            books: {
+              ...fetchMoreResult.books,
+              nodes: [
+                ...prev.books.nodes,
+                ...fetchMoreResult.books.nodes,
+              ]
+            }
+          })
+        }
+      })
+    }
+  }
 
   if(loading) { return( <div> loading... </div> ) }
   if(error) { return( <div> error </div> ) }
+
   return(
     <div>
       {
@@ -33,6 +62,7 @@ const BookList = () => {
           <div key={id}> {id} : {title} </div>
         ))
       }
+      <button type='button' onClick={onFetchMore} >fetch more</button>
     </div>
   )
 
