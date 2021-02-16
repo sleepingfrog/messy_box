@@ -19,5 +19,9 @@ Rails.application.routes.draw do
     root action: :index
   end
 
-  resources :books, only: [:index, :show]
+  resources :books, only: [:index] do
+    member do
+      get :show, path: '(/pages(/:page_number))'
+    end
+  end
 end
