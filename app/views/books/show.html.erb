@@ -4,3 +4,4 @@
 <h2><%= @book.title %></h2>
 <p><%= @book.description %></p>
 <%= tag(:div, id: 'root', data: {id: @book.id}) %>
+<%= javascript_pack_tag('book_show') %>
