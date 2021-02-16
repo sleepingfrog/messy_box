@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 Rails.application.routes.draw do
-  get 'books/index'
   namespace :users do
     resources :todos, only: [:index]
   end
@@ -19,4 +18,6 @@ Rails.application.routes.draw do
   namespace :konva_sample do
     root action: :index
   end
+
+  resources :books, only: [:index]
 end
