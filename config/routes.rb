@@ -19,5 +19,5 @@ Rails.application.routes.draw do
     root action: :index
   end
 
-  resources :books, only: [:index]
+  resources :books, only: [:index, :show]
 end
