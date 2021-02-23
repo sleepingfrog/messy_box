@@ -8,7 +8,9 @@ import {
   Route,
   Switch,
   useRouteMatch,
-  useParams
+  useParams,
+  useLocation,
+  Redirect,
 } from 'react-router-dom';
 
 const BOOK_QUERY = gql`
@@ -56,6 +58,8 @@ const BookContext = React.createContext({
 })
 
 function Book(){
+  let match = useRouteMatch('/books/:bookId');
+  let { pathname } = useLocation();
   const { bookId } = useParams();
   const { loading, error, data } = useQuery(BOOK_QUERY, {
     variables: {id: bookId}
@@ -67,6 +71,21 @@ function Book(){
   return(
     <BookContext.Provider value={data.book}>
       <BookInfo />
+      <nav>
+        <ul>
+          {data.book.chapters.map(({position}) =>(
+            <li key={position}>
+              <Link to={`${match.url}/chapters/${position}`} >{position}</Link>
+            </li>
+          )) }
+        </ul>
+      </nav>
+      <Switch>
+        <Redirect from="/:url*(/+)" to={pathname.slice(0, -1)} />
+        <Route path={`${match.url}/chapters/:position`}>
+          <Chapter />
+        </Route>
+      </Switch>
     </BookContext.Provider>
   )
 }
@@ -87,6 +106,17 @@ function BookInfo() {
       <div> title: {data.title} </div>
       <div> description: {data.description} </div>
       {renderChapterInfo()}
+    </div>
+  )
+}
+
+function Chapter() {
+  const { position } = useParams();
+  const bookData = useContext(BookContext);
+  const data = bookData.chapters.find((chapter) => chapter.position === parseInt(position))
+  return(
+    <div>
+      {data.position}, {data.pageCount}
     </div>
   )
 }

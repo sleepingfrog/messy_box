@@ -21,7 +21,7 @@ Rails.application.routes.draw do
 
   resources :books, only: [:index] do
     member do
-      get :show, path: '(/pages(/:page_number))'
+      get :show, path: '(/chapters/:position)'
     end
   end
 end
