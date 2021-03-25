@@ -4,8 +4,16 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '2.7.2'
 
-# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 6.0.3', '>= 6.0.3.4'
+gem 'actioncable', '~> 6.0.3', '>= 6.0.3.4'
+gem 'activemodel', '~> 6.0.3', '>= 6.0.3.4'
+gem 'activejob', '~> 6.0.3', '>= 6.0.3.4'
+gem 'activerecord', '~> 6.0.3', '>= 6.0.3.4'
+gem 'actionpack', '~> 6.0.3', '>= 6.0.3.4'
+gem 'actionmailer', '~> 6.0.3', '>= 6.0.3.4'
+gem 'actionview', '~> 6.0.3', '>= 6.0.3.4'
+gem 'railties', '~> 6.0.3', '>= 6.0.3.4'
+gem 'sprockets-rails'
+
 # Use postgresql as the database for Active Record
 gem 'pg', '>= 0.18', '< 2.0'
 # Use Puma as the app server
