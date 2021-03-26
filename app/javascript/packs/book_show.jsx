@@ -22,6 +22,23 @@ const BOOK_QUERY = gql`
       chapters {
         position
         pageCount
+        pages {
+          number
+          frames {
+            id
+            x
+            y
+            text
+            color
+          }
+        }
+      }
+      frames {
+        id
+        x
+        y
+        text
+        color
       }
     }
   }
@@ -111,12 +128,50 @@ function BookInfo() {
 }
 
 function Chapter() {
+  let match = useRouteMatch('/books/:bookId/chapters/:position');
   const { position } = useParams();
   const bookData = useContext(BookContext);
   const data = bookData.chapters.find((chapter) => chapter.position === parseInt(position))
   return(
     <div>
       {data.position}, {data.pageCount}
+      <nav>
+        <ul>
+          {data.pages.map(({number}) =>(
+            <li key={number}>
+              <Link to={`${match.url}/pages/${number}`} >{number}</Link>
+            </li>
+          ))}
+        </ul>
+      </nav>
+      <Switch>
+        <Route path={`${match.url}/pages/:number`}>
+          <Page chapterPosition={position}/>
+        </Route>
+      </Switch>
+    </div>
+  )
+}
+
+function Page({chapterPosition}) {
+  const { number } = useParams();
+  const bookData = useContext(BookContext);
+  const data = bookData.chapters.find((chapter) => chapter.position === parseInt(chapterPosition)).pages.find((page) => page.number === parseInt(number))
+  const renderFrames = () => (
+    data.frames.map((frame) => <Frame key={frame.id} {...frame} />)
+  )
+  return(
+    <div>
+      {data.number}
+      {renderFrames()}
+    </div>
+  )
+}
+
+function Frame({id, x, y, text, color}) {
+  return(
+    <div>
+      {id}, {x}, {y}, {text}, {color}
     </div>
   )
 }
