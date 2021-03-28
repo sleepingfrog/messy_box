@@ -1,0 +1,2 @@
+class PageSize < ApplicationRecord
+end
