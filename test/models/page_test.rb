@@ -2,16 +2,18 @@
 #
 # Table name: pages
 #
-#  id         :bigint           not null, primary key
-#  number     :integer
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  chapter_id :bigint           not null
+#  id           :bigint           not null, primary key
+#  number       :integer
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  chapter_id   :bigint           not null
+#  page_size_id :bigint
 #
 # Indexes
 #
 #  index_pages_on_chapter_id             (chapter_id)
 #  index_pages_on_chapter_id_and_number  (chapter_id,number) UNIQUE
+#  index_pages_on_page_size_id           (page_size_id)
 #
 # Foreign Keys
 #

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_06_191918) do
+ActiveRecord::Schema.define(version: 2021_03_28_131356) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -70,13 +70,23 @@ ActiveRecord::Schema.define(version: 2021_02_06_191918) do
     t.index ["page_id"], name: "index_frames_on_page_id"
   end
 
+  create_table "page_sizes", force: :cascade do |t|
+    t.integer "width", null: false
+    t.integer "height", null: false
+    t.string "name", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "pages", force: :cascade do |t|
     t.bigint "chapter_id", null: false
     t.integer "number"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "page_size_id"
     t.index ["chapter_id", "number"], name: "index_pages_on_chapter_id_and_number", unique: true
     t.index ["chapter_id"], name: "index_pages_on_chapter_id"
+    t.index ["page_size_id"], name: "index_pages_on_page_size_id"
   end
 
   create_table "tags", force: :cascade do |t|
