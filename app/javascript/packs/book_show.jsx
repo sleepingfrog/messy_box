@@ -24,6 +24,10 @@ const BOOK_QUERY = gql`
         pageCount
         pages {
           number
+          pageSize {
+            width
+            height
+          }
           frames {
             id
             x
@@ -92,7 +96,7 @@ function Book(){
         <ul>
           {data.book.chapters.map(({position}) =>(
             <li key={position}>
-              <Link to={`${match.url}/chapters/${position}`} >{position}</Link>
+              <Link to={`${match.url}/chapters/${position}`} >chapter:{position}</Link>
             </li>
           )) }
         </ul>
@@ -139,7 +143,7 @@ function Chapter() {
         <ul>
           {data.pages.map(({number}) =>(
             <li key={number}>
-              <Link to={`${match.url}/pages/${number}`} >{number}</Link>
+              <Link to={`${match.url}/pages/${number}`} >page: {number}</Link>
             </li>
           ))}
         </ul>
@@ -161,10 +165,16 @@ function Page({chapterPosition}) {
     data.frames.map((frame) => <Frame key={frame.id} {...frame} />)
   )
   return(
-    <div>
-      {data.number}
-      {renderFrames()}
-    </div>
+    <>
+      <div>
+        page: {data.number}
+        width: {data.pageSize.width}
+        height: {data.pageSize.height}
+      </div>
+      <div>
+        frames: {renderFrames()}
+      </div>
+    </>
   )
 }
 
