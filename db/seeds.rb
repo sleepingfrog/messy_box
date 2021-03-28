@@ -45,6 +45,10 @@ print_seed('frame_size') do
 end
 
 print_seed('book') do
+  page_sizes = [
+    PageSize.create!(name: 'name1', width: 4, height: 4),
+    PageSize.create!(name: 'name2', width: 10, height: 8)
+  ]
   book = Book.new(title: 'title1', description: 'description1')
   [
     { position: 1, page_count: 1, page_offset: 0 },
@@ -52,7 +56,7 @@ print_seed('book') do
   ].each do |attrs|
     book.chapters.build(**attrs).tap do |chapter|
       1.upto(attrs[:page_count]) do |i|
-        chapter.pages.build(number: i)
+        chapter.pages.build(number: i, page_size: page_sizes[i - 1])
       end
     end
   end
@@ -80,7 +84,7 @@ print_seed('book') do
   ].each do |attrs|
     book.chapters.build(**attrs).tap do |chapter|
       1.upto(attrs[:page_count]) do |i|
-        chapter.pages.build(number: i)
+        chapter.pages.build(number: i, page_size: page_sizes[0])
       end
     end
   end
