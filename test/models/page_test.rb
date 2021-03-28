@@ -46,9 +46,13 @@ class PageTest < ActiveSupport::TestCase
       page_offset: 0,
       page_count: 3
     )
+    page_size = PageSize.new(
+      name: 'page_size1',
+      width: 3,
+      height: 4,
+    )
 
-    chapter.pages.build(number: 1)
-
+    chapter.pages.build(number: 1, page_size: page_size)
     chapter.save!
 
     page = chapter.pages.build(number: 1)
@@ -59,15 +63,20 @@ class PageTest < ActiveSupport::TestCase
 
   test 'book_page_number scope' do
     book = Book.new
+    page_size = PageSize.new(
+      name: 'page_size1',
+      width: 3,
+      height: 4,
+    )
     book.chapters.build(position: 1, page_offset: 0, page_count: 3) do |chapter|
-      chapter.pages.build(number: 1)
-      chapter.pages.build(number: 2)
-      chapter.pages.build(number: 3)
+      chapter.pages.build(number: 1, page_size: page_size)
+      chapter.pages.build(number: 2, page_size: page_size)
+      chapter.pages.build(number: 3, page_size: page_size)
     end
     book.chapters.build(position: 2, page_offset: 3, page_count: 3) do |chapter|
-      chapter.pages.build(number: 1)
-      chapter.pages.build(number: 2)
-      chapter.pages.build(number: 3)
+      chapter.pages.build(number: 1, page_size: page_size)
+      chapter.pages.build(number: 2, page_size: page_size)
+      chapter.pages.build(number: 3, page_size: page_size)
     end
     book.save!
 

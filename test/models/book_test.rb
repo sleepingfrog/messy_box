@@ -23,17 +23,22 @@ class BookTest < ActiveSupport::TestCase
 
   test 'page_order' do
     book = Book.new
+    page_size = PageSize.new(
+      name: 'page_size1',
+      width: 3,
+      height: 4,
+    )
     book.chapters.build(position: 3, page_count: 2, page_offset: 4).tap do |chapter|
-      chapter.pages.build(number: 2)
-      chapter.pages.build(number: 1)
+      chapter.pages.build(number: 2, page_size: page_size)
+      chapter.pages.build(number: 1, page_size: page_size)
     end
     book.chapters.build(position: 1, page_count: 2, page_offset: 0).tap do |chapter|
-      chapter.pages.build(number: 2)
-      chapter.pages.build(number: 1)
+      chapter.pages.build(number: 2, page_size: page_size)
+      chapter.pages.build(number: 1, page_size: page_size)
     end
     book.chapters.build(position: 2, page_count: 2, page_offset: 2).tap do |chapter|
-      chapter.pages.build(number: 2)
-      chapter.pages.build(number: 1)
+      chapter.pages.build(number: 2, page_size: page_size)
+      chapter.pages.build(number: 1, page_size: page_size)
     end
 
     book.save!

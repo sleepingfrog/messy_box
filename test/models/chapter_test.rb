@@ -25,10 +25,15 @@ class ChapterTest < ActiveSupport::TestCase
 
   test 'page_order' do
     book = Book.new
+    page_size = PageSize.new(
+      name: 'page_size1',
+      width: 3,
+      height: 4,
+    )
     chapter = book.chapters.build(position: 1, page_offset: 0, page_count: 3)
-    chapter.pages.build(number: 3)
-    chapter.pages.build(number: 1)
-    chapter.pages.build(number: 2)
+    chapter.pages.build(number: 3, page_size: page_size)
+    chapter.pages.build(number: 1, page_size: page_size)
+    chapter.pages.build(number: 2, page_size: page_size)
     book.save!
 
     assert_equal(

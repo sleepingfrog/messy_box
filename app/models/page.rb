@@ -21,6 +21,7 @@
 #
 class Page < ApplicationRecord
   belongs_to :chapter
+  belongs_to :page_size
   has_many :frames
 
   validates :number,
