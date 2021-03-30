@@ -210,6 +210,12 @@ function Page({chapterPosition}) {
   }
 
   const handleAllocatedFrameDragStart = (e, id) => {
+    const frame = allocatedFrames.find((frame) => frame.id === id)
+    setAllocatedFrames(
+      [
+        ...allocatedFrames.filter((frame) => frame.id !== id), frame
+      ]
+    )
   }
   const handleAllocatedFrameDragMove = (e, id) => {
   }
