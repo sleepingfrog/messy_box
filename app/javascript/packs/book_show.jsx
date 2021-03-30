@@ -209,6 +209,8 @@ function Page({chapterPosition}) {
     yCount: data.pageSize.height,
   }
 
+  const [shadow, setShadow] = useState(null)
+
   const handleAllocatedFrameDragStart = (e, id) => {
     const frame = allocatedFrames.find((frame) => frame.id === id)
     setAllocatedFrames(
@@ -217,9 +219,18 @@ function Page({chapterPosition}) {
       ]
     )
   }
-  const handleAllocatedFrameDragMove = (e, id) => {
+  const handleAllocatedFrameDragMove = (e, id, {x, y}) => {
+    const frame = allocatedFrames.find((frame) => frame.id === id)
+    setShadow({...frame, x: x, y: y})
   }
   const handleAllocatedFrameDragEnd = (e, id) => {
+    const frame = allocatedFrames.find((frame) => frame.id === id)
+    setAllocatedFrames(
+      [
+        ...allocatedFrames.filter((frame) => frame.id !== id), {...frame, x: shadow.x, y: shadow.y}
+      ]
+    )
+    setShadow(null)
   }
 
   return(
@@ -227,6 +238,7 @@ function Page({chapterPosition}) {
       <Stage width={pageSetting.width} height={pageSetting.height}>
         <PageContext.Provider value={pageSetting}>
           <GridLayer />
+          <ShadowLayer shadow={shadow} />
           <FrameLayer
             frames={allocatedFrames}
             {
@@ -270,6 +282,17 @@ function GridLayer() {
   )
 }
 
+function ShadowLayer({shadow}) {
+  if(!shadow) {
+    return(null)
+  }
+  return(
+    <Layer listening={false}>
+      <AllocatedFrame key={'shadow'} {...shadow} forceColor={"#DDD"} />
+    </Layer>
+  )
+
+}
 function FrameLayer({frames, handleDragStart, handleDragMove, handleDragEnd}) {
   return(
     <Layer>
@@ -280,7 +303,7 @@ function FrameLayer({frames, handleDragStart, handleDragMove, handleDragEnd}) {
   )
 }
 
-function AllocatedFrame({id, x, y, frameSize, text, color, handleDragStart, handleDragMove, handleDragEnd}) {
+function AllocatedFrame({id, x, y, frameSize, text, color, handleDragStart, handleDragMove, handleDragEnd, forceColor}) {
   const page = useContext(PageContext);
   const blockSize = {
     width: page.width / page.xCount,
@@ -315,7 +338,7 @@ function AllocatedFrame({id, x, y, frameSize, text, color, handleDragStart, hand
       x: e.target._lastPos.x,
       y: e.target._lastPos.y,
     })
-    handleDragMove(e, id)
+    handleDragMove(e, id, calcPosition({x: e.target._lastPos.x, y: e.target._lastPos.y}))
   }
   const onDragStart = (e) => {
     setIsDragging(true)
@@ -328,7 +351,7 @@ function AllocatedFrame({id, x, y, frameSize, text, color, handleDragStart, hand
       y={position.y}
       width={frameSize.width * blockSize.width}
       height={frameSize.height * blockSize.height}
-      fill={color}
+      fill={ forceColor ? forceColor : color}
       draggable={true}
       onDragEnd={onDragEnd}
       onDragStart={onDragStart}
