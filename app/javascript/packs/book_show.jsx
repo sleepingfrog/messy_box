@@ -219,9 +219,23 @@ function Page({chapterPosition}) {
       ]
     )
   }
-  const handleAllocatedFrameDragMove = (e, id, {x, y}) => {
+  const handleAllocatedFrameDragMove = (e, id, rawPosition) => {
     const frame = allocatedFrames.find((frame) => frame.id === id)
-    setShadow({...frame, x: x, y: y})
+    let x = rawPosition.x
+    let y = rawPosition.y
+    if(x < 0) {
+      x = 0
+    } else if(x > pageSetting.xCount - 1) {
+      x = pageSetting.xCount - 1
+    }
+
+    if(y < 0) {
+      y = 0
+    } else if(y > pageSetting.yCount - 1) {
+      y = pageSetting.yCount - 1
+    }
+
+    setShadow({...frame, x, y})
   }
   const handleAllocatedFrameDragEnd = (e, id) => {
     const frame = allocatedFrames.find((frame) => frame.id === id)
