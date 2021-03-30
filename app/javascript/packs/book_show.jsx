@@ -195,8 +195,13 @@ function Page({chapterPosition}) {
   const renderFrames = () => (
     data.frames.map((frame) => <Frame key={frame.id} {...frame} />)
   )
-  const allocatedIds = data.frames.map(({id}) => id)
-  const allocatedFrames = bookData.frames.filter(({id}) => allocatedIds.includes(id))
+  const [allocatedFrames, setAllocatedFrames] = useState([])
+  useEffect(() => {
+    const allocatedIds = data.frames.map(({id}) => id)
+    setAllocatedFrames(
+      bookData.frames.filter(({id}) => allocatedIds.includes(id))
+    )
+  }, [data.frames])
   const pageSetting = {
     width: 800,
     height: 600,
@@ -204,12 +209,28 @@ function Page({chapterPosition}) {
     yCount: data.pageSize.height,
   }
 
+  const handleAllocatedFrameDragStart = (e, id) => {
+  }
+  const handleAllocatedFrameDragMove = (e, id) => {
+  }
+  const handleAllocatedFrameDragEnd = (e, id) => {
+  }
+
   return(
     <>
       <Stage width={pageSetting.width} height={pageSetting.height}>
         <PageContext.Provider value={pageSetting}>
           <GridLayer />
-          <FrameLayer frames={allocatedFrames}/>
+          <FrameLayer
+            frames={allocatedFrames}
+            {
+              ...{
+                handleDragStart: handleAllocatedFrameDragStart,
+                handleDragMove: handleAllocatedFrameDragMove,
+                handleDragEnd: handleAllocatedFrameDragEnd
+              }
+            }
+          />
         </PageContext.Provider>
       </Stage>
       <FrameList />
@@ -243,17 +264,17 @@ function GridLayer() {
   )
 }
 
-function FrameLayer({frames}) {
+function FrameLayer({frames, handleDragStart, handleDragMove, handleDragEnd}) {
   return(
     <Layer>
       {frames.map((frame) => (
-        <AllocatedFrame key={frame.id} {...frame} />
+        <AllocatedFrame key={frame.id} {...frame} {...{handleDragStart, handleDragMove, handleDragEnd}}  />
       ))}
     </Layer>
   )
 }
 
-function AllocatedFrame({x, y, frameSize, text, color}) {
+function AllocatedFrame({id, x, y, frameSize, text, color, handleDragStart, handleDragMove, handleDragEnd}) {
   const page = useContext(PageContext);
   const blockSize = {
     width: page.width / page.xCount,
@@ -280,6 +301,7 @@ function AllocatedFrame({x, y, frameSize, text, color}) {
 
   const onDragEnd = (e) => {
     setIsDragging(false)
+    handleDragEnd(e, id)
   }
 
   const onDragMove = (e) => {
@@ -287,9 +309,11 @@ function AllocatedFrame({x, y, frameSize, text, color}) {
       x: e.target._lastPos.x,
       y: e.target._lastPos.y,
     })
+    handleDragMove(e, id)
   }
   const onDragStart = (e) => {
     setIsDragging(true)
+    handleDragStart(e, id)
   }
 
   return(
