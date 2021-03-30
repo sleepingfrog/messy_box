@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import ReactDOM from 'react-dom';
 import { createCache, createClient } from '../utils/apollo';
 import { ApolloProvider, useQuery, gql  } from '@apollo/client';
@@ -95,7 +95,6 @@ function Book(){
   return(
     <BookContext.Provider value={data.book}>
       <BookInfo />
-      <FrameList />
       <nav>
         <ul>
           {data.book.chapters.map(({position}) =>(
@@ -204,13 +203,17 @@ function Page({chapterPosition}) {
     xCount: data.pageSize.width,
     yCount: data.pageSize.height,
   }
+
   return(
-    <Stage width={pageSetting.width} height={pageSetting.height}>
-      <PageContext.Provider value={pageSetting}>
-        <GridLayer />
-        <FrameLayer frames={allocatedFrames}/>
-      </PageContext.Provider>
-    </Stage>
+    <>
+      <Stage width={pageSetting.width} height={pageSetting.height}>
+        <PageContext.Provider value={pageSetting}>
+          <GridLayer />
+          <FrameLayer frames={allocatedFrames}/>
+        </PageContext.Provider>
+      </Stage>
+      <FrameList />
+    </>
   )
 }
 
@@ -251,19 +254,56 @@ function FrameLayer({frames}) {
 }
 
 function AllocatedFrame({x, y, frameSize, text, color}) {
-  console.log(text, x, y, frameSize)
   const page = useContext(PageContext);
   const blockSize = {
     width: page.width / page.xCount,
     height: page.height / page.yCount,
   }
+
+  const [isDragging, setIsDragging] = useState(false)
+  const [position, setPosition] = useState({
+    x: x * blockSize.width,
+    y: y * blockSize.height,
+  })
+
+  useEffect(() => {
+    setPosition({
+      x: x * blockSize.width,
+      y: y * blockSize.height,
+    })
+  }, [x, y, isDragging])
+
+  const calcPosition = ({x, y}) => ({
+      x: Math.round(x / blockSize.width),
+      y: Math.round(y / blockSize.height),
+  })
+
+  const onDragEnd = (e) => {
+    setIsDragging(false)
+  }
+
+  const onDragMove = (e) => {
+    setPosition({
+      x: e.target._lastPos.x,
+      y: e.target._lastPos.y,
+    })
+  }
+  const onDragStart = (e) => {
+    setIsDragging(true)
+  }
+
   return(
     <Rect
-      x={x * blockSize.width}
-      y={y * blockSize.height}
+      x={position.x}
+      y={position.y}
       width={frameSize.width * blockSize.width}
       height={frameSize.height * blockSize.height}
       fill={color}
+      draggable={true}
+      onDragEnd={onDragEnd}
+      onDragStart={onDragStart}
+      onDragMove={onDragMove}
+      _useStrictMode
     />
   )
 }
