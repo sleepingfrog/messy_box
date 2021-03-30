@@ -12,6 +12,7 @@ import {
   useLocation,
   Redirect,
 } from 'react-router-dom';
+import { Rect, Layer, Stage, Line } from 'react-konva';
 
 const BOOK_QUERY = gql`
   query BookType($id: ID!) {
@@ -30,10 +31,6 @@ const BOOK_QUERY = gql`
           }
           frames {
             id
-            x
-            y
-            text
-            color
           }
         }
       }
@@ -43,6 +40,11 @@ const BOOK_QUERY = gql`
         y
         text
         color
+        frameSize {
+          name
+          height
+          width
+        }
       }
     }
   }
@@ -75,6 +77,7 @@ function BookRoute() {
 const BookContext = React.createContext({
   title: "",
   description: "",
+  frames: [],
   chapters: [],
 })
 
@@ -92,6 +95,7 @@ function Book(){
   return(
     <BookContext.Provider value={data.book}>
       <BookInfo />
+      <FrameList />
       <nav>
         <ul>
           {data.book.chapters.map(({position}) =>(
@@ -131,6 +135,27 @@ function BookInfo() {
   )
 }
 
+function FrameList() {
+  const {frames} = useContext(BookContext);
+  return(
+    <ul>
+      {
+        frames.map(({id, color, text, frameSize, x}) => (
+          <li key={id}>
+            <div>
+              <span style={{background: color}}>　</span>
+              width: {frameSize.width}
+              height: {frameSize.height}
+              text: {text}
+              { x !== null ? <span>allodated</span> : null }
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  )
+}
+
 function Chapter() {
   let match = useRouteMatch('/books/:bookId/chapters/:position');
   const { position } = useParams();
@@ -157,6 +182,13 @@ function Chapter() {
   )
 }
 
+const PageContext = React.createContext({
+  width: 0,
+  height: 0,
+  xCount: 0,
+  yCount: 0,
+})
+
 function Page({chapterPosition}) {
   const { number } = useParams();
   const bookData = useContext(BookContext);
@@ -164,17 +196,75 @@ function Page({chapterPosition}) {
   const renderFrames = () => (
     data.frames.map((frame) => <Frame key={frame.id} {...frame} />)
   )
+  const allocatedIds = data.frames.map(({id}) => id)
+  const allocatedFrames = bookData.frames.filter(({id}) => allocatedIds.includes(id))
+  const pageSetting = {
+    width: 800,
+    height: 600,
+    xCount: data.pageSize.width,
+    yCount: data.pageSize.height,
+  }
   return(
-    <>
-      <div>
-        page: {data.number}
-        width: {data.pageSize.width}
-        height: {data.pageSize.height}
-      </div>
-      <div>
-        frames: {renderFrames()}
-      </div>
-    </>
+    <Stage width={pageSetting.width} height={pageSetting.height}>
+      <PageContext.Provider value={pageSetting}>
+        <GridLayer />
+        <FrameLayer frames={allocatedFrames}/>
+      </PageContext.Provider>
+    </Stage>
+  )
+}
+
+function GridLayer() {
+  const {width, height, xCount, yCount} = useContext(PageContext);
+  const stroke = 'red'
+  const renderGridLines = () => {
+    const horizontals = [...Array(xCount + 1)].map((n, index) => (
+      <Line key={"x" + index} points={[index * (width / xCount), 0, index * (width / xCount), height]} stroke={stroke}  strokeWidth={0.5}/>
+    ))
+    const verticals = [...Array(yCount + 1)].map((n, index) => (
+      <Line key={"y" + index} points={[0, index * (height / yCount), width, index * (height / yCount)]} stroke={stroke}  strokeWidth={0.5}/>
+    ))
+
+    return(
+      [
+        ...horizontals,
+        ...verticals,
+      ]
+    )
+  }
+
+  return(
+    <Layer listening={false}>
+      {renderGridLines()}
+    </Layer>
+  )
+}
+
+function FrameLayer({frames}) {
+  return(
+    <Layer>
+      {frames.map((frame) => (
+        <AllocatedFrame key={frame.id} {...frame} />
+      ))}
+    </Layer>
+  )
+}
+
+function AllocatedFrame({x, y, frameSize, text, color}) {
+  console.log(text, x, y, frameSize)
+  const page = useContext(PageContext);
+  const blockSize = {
+    width: page.width / page.xCount,
+    height: page.height / page.yCount,
+  }
+  return(
+    <Rect
+      x={x * blockSize.width}
+      y={y * blockSize.height}
+      width={frameSize.width * blockSize.width}
+      height={frameSize.height * blockSize.height}
+      fill={color}
+    />
   )
 }
 
