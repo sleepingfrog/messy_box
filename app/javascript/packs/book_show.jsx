@@ -225,14 +225,14 @@ function Page({chapterPosition}) {
     let y = rawPosition.y
     if(x < 0) {
       x = 0
-    } else if(x > pageSetting.xCount - 1) {
-      x = pageSetting.xCount - 1
+    } else if(x > pageSetting.xCount - frame.frameSize.width) {
+      x = pageSetting.xCount - frame.frameSize.width
     }
 
     if(y < 0) {
       y = 0
-    } else if(y > pageSetting.yCount - 1) {
-      y = pageSetting.yCount - 1
+    } else if(y > pageSetting.yCount - frame.frameSize.height) {
+      y = pageSetting.yCount -frame.frameSize.height
     }
 
     setShadow({...frame, x, y})
