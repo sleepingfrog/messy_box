@@ -134,14 +134,14 @@ function BookInfo() {
   )
 }
 
-function FrameList() {
+function FrameList({handleClick, handleMouseOver}) {
   const {frames} = useContext(BookContext);
   return(
     <ul>
       {
         frames.map(({id, color, text, frameSize, x}) => (
           <li key={id}>
-            <div>
+            <div onClick={(e) => handleClick(e, id)}>
               <span style={{background: color}}>　</span>
               width: {frameSize.width}
               height: {frameSize.height}
@@ -252,6 +252,23 @@ function Page({chapterPosition}) {
     setShadow(null)
   }
 
+
+  const handleFrameListClick = (e, id) => {
+    const frame = bookData.frames.find(frame => frame.id === id)
+    const position = FindFreeSpace({width: pageSetting.xCount, height: pageSetting.yCount}, allocatedFrames, frame.frameSize)
+    if(position) {
+      setAllocatedFrames(
+        [...allocatedFrames, {...frame, x: position.x, y: position.y}]
+      )
+    }
+
+  }
+
+  const handleFrameListMouseOver = (e, id) => {
+    console.log('handle frame list mouse over')
+
+  }
+
   return(
     <>
       <Stage width={pageSetting.width} height={pageSetting.height}>
@@ -270,7 +287,7 @@ function Page({chapterPosition}) {
           />
         </PageContext.Provider>
       </Stage>
-      <FrameList />
+      <FrameList handleClick={handleFrameListClick} handleMouseOver={handleFrameListMouseOver}/>
     </>
   )
 }
@@ -400,6 +417,18 @@ function FramesCollisionCHeck(frame, others) {
   return(
     others.some( other => FrameCollisionCheck(other, frame) )
   )
+}
+
+function FindFreeSpace(pageSize, allocatedFrames, frameSize) {
+  for(let i = 0; i < pageSize.height; i++) {
+    for(let j = 0; j < pageSize.width; j++) {
+      if(FramesCollisionCHeck({frameSize, x: j, y: i}, allocatedFrames)) {
+        continue
+      } else {
+        return { x: j, y: i }
+      }
+    }
+  }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
