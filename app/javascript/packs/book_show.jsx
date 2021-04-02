@@ -12,7 +12,7 @@ import {
   useLocation,
   Redirect,
 } from 'react-router-dom';
-import { Rect, Layer, Stage, Line } from 'react-konva';
+import { Rect, Layer, Stage, Line, Text } from 'react-konva';
 
 const BOOK_QUERY = gql`
   query BookType($id: ID!) {
@@ -390,19 +390,34 @@ function AllocatedFrame({id, x, y, frameSize, text, color, handleDragStart, hand
     handleDragStart(e, id)
   }
 
+  const decoretedText = `text:${text}\nframeSize: ${frameSize.name}`
+
   return(
-    <Rect
-      x={position.x}
-      y={position.y}
-      width={frameSize.width * blockSize.width}
-      height={frameSize.height * blockSize.height}
-      fill={ forceColor ? forceColor : color}
-      draggable={true}
-      onDragEnd={onDragEnd}
-      onDragStart={onDragStart}
-      onDragMove={onDragMove}
-      _useStrictMode
-    />
+    <>
+      <Rect
+        x={position.x}
+        y={position.y}
+        width={frameSize.width * blockSize.width}
+        height={frameSize.height * blockSize.height}
+        fill={ forceColor ? forceColor : color}
+        draggable={true}
+        onDragEnd={onDragEnd}
+        onDragStart={onDragStart}
+        onDragMove={onDragMove}
+        _useStrictMode
+      />
+      <Text
+        x={position.x}
+        y={position.y}
+        width={frameSize.width * blockSize.width}
+        height={frameSize.height * blockSize.height}
+        text={decoretedText}
+        fill={"#000"}
+        fontSize={18}
+        align={'center'}
+        padding={5}
+      />
+    </>
   )
 }
 
