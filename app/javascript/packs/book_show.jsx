@@ -235,7 +235,12 @@ function Page({chapterPosition}) {
       y = pageSetting.yCount - frame.frameSize.height
     }
 
-    setShadow({...frame, x, y})
+    const tmpShadow = { ...frame, x, y }
+    if(FramesCollisionCHeck(tmpShadow, allocatedFrames.filter((frame) => frame.id !== id))) {
+      console.log('collision!')
+    } else {
+      setShadow(tmpShadow)
+    }
   }
   const handleAllocatedFrameDragEnd = (e, id) => {
     const frame = allocatedFrames.find((frame) => frame.id === id)
@@ -380,6 +385,20 @@ function Frame({id, x, y, text, color}) {
     <div>
       {id}, {x}, {y}, {text}, {color}
     </div>
+  )
+}
+
+function FrameCollisionCheck(frame, other) {
+  return(
+    (frame.x <= other.x + other.frameSize.width - 1)
+    && (other.x <= frame.x + frame.frameSize.width - 1)
+    && (frame.y <= other.y + other.frameSize.height - 1)
+    && (other.y <= frame.y + frame.frameSize.height - 1)
+  )
+}
+function FramesCollisionCHeck(frame, others) {
+  return(
+    others.some( other => FrameCollisionCheck(other, frame) )
   )
 }
 
