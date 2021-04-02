@@ -420,6 +420,7 @@ function AllocatedFrame({id, x, y, frameSize, text, color, handleDragStart, hand
         fontSize={18}
         align={'center'}
         padding={5}
+        listening={false}
       />
     </>
   )
