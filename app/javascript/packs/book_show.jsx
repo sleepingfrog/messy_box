@@ -138,19 +138,45 @@ function FrameList({frames, handleClick, handleMouseOver, handleMouseOut}) {
   return(
     <ul>
       {
-        frames.map(({id, color, text, frameSize, x}) => (
-          <li key={id}>
-            <div onClick={(e) => handleClick(e, id)} onMouseOver={(e) => handleMouseOver(e, id)} onMouseOut={handleMouseOut}>
-              <span style={{background: color}}>　</span>
-              width: {frameSize.width}
-              height: {frameSize.height}
-              text: {text}
-              { x !== null ? <span>allodated</span> : null }
-            </div>
+        frames.map( frame => (
+          <li key={frame.id}>
+            <FrameListItem
+              {...frame}
+              handleClick={handleClick}
+              handleMouseOver={handleMouseOver}
+              handleMouseOut={handleMouseOut}
+            />
           </li>
         ))
       }
     </ul>
+  )
+}
+
+function FrameListItem({id, color, text, frameSize, x, handleClick, handleMouseOver, handleMouseOut}) {
+  const [mouseOver, setMouseOver] = useState(false)
+  const onMouseOver = (e) => {
+    setMouseOver(true)
+    handleMouseOver(e, id)
+  }
+  const onMouseOut = (e) => {
+    setMouseOver(false)
+    handleMouseOut(e)
+  }
+
+  const style = {
+    background: (mouseOver ? '#DDD' : null)
+  }
+
+  return(
+    <div style={style} onClick={(e) => handleClick(e, id)} onMouseOver={onMouseOver} onMouseOut={onMouseOut}>
+      <span style={{background: color}}>　</span>
+      width: {frameSize.width}
+      height: {frameSize.height}
+      text: {text}
+      a: {mouseOver}
+      { x !== null ? <span>allodated</span> : null }
+    </div>
   )
 }
 
