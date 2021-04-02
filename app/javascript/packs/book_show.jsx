@@ -449,8 +449,8 @@ function FramesCollisionCHeck(frame, others) {
 }
 
 function FindFreeSpace(pageSize, allocatedFrames, frameSize) {
-  for(let i = 0; i < pageSize.height; i++) {
-    for(let j = 0; j < pageSize.width; j++) {
+  for(let i = 0; i < pageSize.height - frameSize.height + 1; i++) {
+    for(let j = 0; j < pageSize.width - frameSize.width + 1; j++) {
       if(FramesCollisionCHeck({frameSize, x: j, y: i}, allocatedFrames)) {
         continue
       } else {
