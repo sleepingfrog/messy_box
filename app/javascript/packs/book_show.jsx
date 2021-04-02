@@ -296,7 +296,11 @@ function Page({chapterPosition}) {
           />
         </PageContext.Provider>
       </Stage>
-      <FrameList handleClick={handleFrameListClick} handleMouseOver={handleFrameListMouseOver} handleMouseOut={handleFrameListMouseOut}/>
+      <FrameList
+        handleClick={handleFrameListClick}
+        handleMouseOver={handleFrameListMouseOver}
+        handleMouseOut={handleFrameListMouseOut}
+      />
     </>
   )
 }
