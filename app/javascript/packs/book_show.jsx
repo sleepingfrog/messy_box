@@ -134,14 +134,14 @@ function BookInfo() {
   )
 }
 
-function FrameList({handleClick, handleMouseOver}) {
+function FrameList({handleClick, handleMouseOver, handleMouseOut}) {
   const {frames} = useContext(BookContext);
   return(
     <ul>
       {
         frames.map(({id, color, text, frameSize, x}) => (
           <li key={id}>
-            <div onClick={(e) => handleClick(e, id)}>
+            <div onClick={(e) => handleClick(e, id)} onMouseOver={(e) => handleMouseOver(e, id)} onMouseOut={handleMouseOut}>
               <span style={{background: color}}>　</span>
               width: {frameSize.width}
               height: {frameSize.height}
@@ -257,6 +257,7 @@ function Page({chapterPosition}) {
     const frame = bookData.frames.find(frame => frame.id === id)
     const position = FindFreeSpace({width: pageSetting.xCount, height: pageSetting.yCount}, allocatedFrames, frame.frameSize)
     if(position) {
+      // unique の制御が必要
       setAllocatedFrames(
         [...allocatedFrames, {...frame, x: position.x, y: position.y}]
       )
@@ -265,8 +266,16 @@ function Page({chapterPosition}) {
   }
 
   const handleFrameListMouseOver = (e, id) => {
-    console.log('handle frame list mouse over')
-
+    // dnd との排他制御が必要
+    const frame = bookData.frames.find(frame => frame.id === id)
+    const position = FindFreeSpace({width: pageSetting.xCount, height: pageSetting.yCount}, allocatedFrames, frame.frameSize)
+    if(position) {
+      setShadow({...frame, x: position.x, y: position.y})
+    }
+  }
+  const handleFrameListMouseOut = (e, id) => {
+    // dnd との排他制御が必要
+    if(shadow) { setShadow(null) }
   }
 
   return(
@@ -287,7 +296,7 @@ function Page({chapterPosition}) {
           />
         </PageContext.Provider>
       </Stage>
-      <FrameList handleClick={handleFrameListClick} handleMouseOver={handleFrameListMouseOver}/>
+      <FrameList handleClick={handleFrameListClick} handleMouseOver={handleFrameListMouseOver} handleMouseOut={handleFrameListMouseOut}/>
     </>
   )
 }
