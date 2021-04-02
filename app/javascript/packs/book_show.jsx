@@ -12,7 +12,7 @@ import {
   useLocation,
   Redirect,
 } from 'react-router-dom';
-import { Rect, Layer, Stage, Line, Text } from 'react-konva';
+import { Rect, Layer, Stage, Line, Text, Label, Tag } from 'react-konva';
 
 const BOOK_QUERY = gql`
   query BookType($id: ID!) {
@@ -284,6 +284,14 @@ function Page({chapterPosition}) {
     if(shadow) { setShadow(null) }
   }
 
+  const handleAllocatedFrameRemove = (e, id) => {
+    setAllocatedFrames(allocatedFrames.filter(frame => frame.id !== id))
+    setNotAllocatedFrames([
+      ...notAllocatedframes, bookData.frames.find(frame => frame.id === id)
+    ])
+  }
+
+
   return(
     <>
       <Stage width={pageSetting.width} height={pageSetting.height}>
@@ -296,7 +304,8 @@ function Page({chapterPosition}) {
               ...{
                 handleDragStart: handleAllocatedFrameDragStart,
                 handleDragMove: handleAllocatedFrameDragMove,
-                handleDragEnd: handleAllocatedFrameDragEnd
+                handleDragEnd: handleAllocatedFrameDragEnd,
+                handleFrameRemove: handleAllocatedFrameRemove,
               }
             }
           />
@@ -349,17 +358,17 @@ function ShadowLayer({shadow}) {
   )
 
 }
-function FrameLayer({frames, handleDragStart, handleDragMove, handleDragEnd}) {
+function FrameLayer({frames, handleDragStart, handleDragMove, handleDragEnd, handleFrameRemove}) {
   return(
     <Layer>
       {frames.map((frame) => (
-        <AllocatedFrame key={frame.id} {...frame} {...{handleDragStart, handleDragMove, handleDragEnd}}  />
+        <AllocatedFrame key={frame.id} {...frame} {...{handleDragStart, handleDragMove, handleDragEnd, handleFrameRemove}}  />
       ))}
     </Layer>
   )
 }
 
-function AllocatedFrame({id, x, y, frameSize, text, color, handleDragStart, handleDragMove, handleDragEnd, forceColor}) {
+function AllocatedFrame({id, x, y, frameSize, text, color, handleDragStart, handleDragMove, handleDragEnd, forceColor, handleFrameRemove}) {
   const page = useContext(PageContext);
   const blockSize = {
     width: page.width / page.xCount,
@@ -401,6 +410,10 @@ function AllocatedFrame({id, x, y, frameSize, text, color, handleDragStart, hand
     handleDragStart(e, id)
   }
 
+  const closeButtonClick = (e) => {
+    handleFrameRemove(e, id);
+  }
+
   const decoretedText = `text:${text}\nframeSize: ${frameSize.name}`
 
   return(
@@ -429,6 +442,27 @@ function AllocatedFrame({id, x, y, frameSize, text, color, handleDragStart, hand
         padding={5}
         listening={false}
       />
+      <Label
+        x={position.x}
+        y={position.y}
+        opacity={0.75}
+      >
+        <Tag
+          fill={'black'}
+          onClick={closeButtonClick}
+        />
+        <Text
+          listening={false}
+          width={30}
+          height={30}
+          text={'x'}
+          fontSize={20}
+          padding={3}
+          fill={'white'}
+          align={'center'}
+          verticalAlign={'center'}
+        />
+      </Label>
     </>
   )
 }
