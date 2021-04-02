@@ -134,8 +134,7 @@ function BookInfo() {
   )
 }
 
-function FrameList({handleClick, handleMouseOver, handleMouseOut}) {
-  const {frames} = useContext(BookContext);
+function FrameList({frames, handleClick, handleMouseOver, handleMouseOut}) {
   return(
     <ul>
       {
@@ -196,10 +195,14 @@ function Page({chapterPosition}) {
     data.frames.map((frame) => <Frame key={frame.id} {...frame} />)
   )
   const [allocatedFrames, setAllocatedFrames] = useState([])
+  const [notAllocatedframes, setNotAllocatedFrames] = useState([])
   useEffect(() => {
     const allocatedIds = data.frames.map(({id}) => id)
     setAllocatedFrames(
       bookData.frames.filter(({id}) => allocatedIds.includes(id))
+    )
+    setNotAllocatedFrames(
+      bookData.frames.filter(({id}) => !allocatedIds.includes(id))
     )
   }, [data.frames])
   const pageSetting = {
@@ -261,6 +264,9 @@ function Page({chapterPosition}) {
       setAllocatedFrames(
         [...allocatedFrames, {...frame, x: position.x, y: position.y}]
       )
+      setNotAllocatedFrames(
+        notAllocatedframes.filter(frame => frame.id !== id)
+      )
     }
 
   }
@@ -297,6 +303,7 @@ function Page({chapterPosition}) {
         </PageContext.Provider>
       </Stage>
       <FrameList
+        frames={notAllocatedframes}
         handleClick={handleFrameListClick}
         handleMouseOver={handleFrameListMouseOver}
         handleMouseOut={handleFrameListMouseOut}
