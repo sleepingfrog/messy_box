@@ -31,6 +31,10 @@ module Mutations
           raise ActiveRecord::RecordNotSaved
         end
 
+        if new_frames.combination(2).any? { |(frame, other)| (frame.x <= other.x + other.frame_size.width - 1) && (frame.y <= other.y + other.frame_size.height - 1) && ( other.x <= frame.x + frame.frame_size.width - 1) && (other.y <= frame.y + frame.frame_size.height - 1)  }
+          raise ActiveRecord::RecordNotSaved
+        end
+
         new_frames.each(&:save!)
 
         page.frames = new_frames
