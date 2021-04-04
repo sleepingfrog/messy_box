@@ -33,12 +33,12 @@ module Mutations
       end
 
       {
-        status: 'success',
+        status: 'succeeded',
         frames: page.frames,
       }
     rescue => e
       {
-        status: 'error'
+        status: 'failed'
       }
     end
   end

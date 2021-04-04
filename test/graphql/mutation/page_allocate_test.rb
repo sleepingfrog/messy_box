@@ -60,7 +60,7 @@ class GraphqlMutationPageAllocateTest < ActiveSupport::TestCase
     end
 
     assert_nil result.dig('errors')
-    assert_equal 'success', result.dig('data', 'pageAllocate', 'status')
+    assert_equal 'succeeded', result.dig('data', 'pageAllocate', 'status')
   end
 
   test 'frame collision' do
