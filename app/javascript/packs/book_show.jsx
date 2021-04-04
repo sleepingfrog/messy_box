@@ -266,7 +266,6 @@ function Page({chapterPosition}) {
 
     const tmpShadow = { ...frame, x, y }
     if(FramesCollisionCHeck(tmpShadow, allocatedFrames.filter((frame) => frame.id !== id))) {
-      console.log('collision!')
     } else {
       setShadow(tmpShadow)
     }
