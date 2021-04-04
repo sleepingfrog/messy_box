@@ -39,6 +39,8 @@ module Mutations
 
         old_frames = page.frames
         old_frames.each do |frame|
+          next if frame.id.in?(new_frames.map(&:id))
+          frame.page_id = nil
           frame.x = nil
           frame.y = nil
           frame.save!

@@ -65,6 +65,41 @@ class GraphqlMutationPageAllocateTest < ActiveSupport::TestCase
     assert_equal 'succeeded', result.dig('data', 'pageAllocate', 'status')
   end
 
+  test 'add frame' do
+    @page = @book.pages.first
+    frame = Frame.find_by_text('frame1')
+    frame.x = 0
+    frame.y = 0
+    frame.page_id = @page.id
+    frame.save!
+
+    variables = {
+      input: {
+        bookId: @page.chapter.book.id,
+        chapterPosition: @page.chapter.position,
+        pageNumber: @page.number,
+        frames: [
+          { x: 0, y: 0, id: Frame.find_by_text('frame1').id },
+          { x: 1, y: 1, id: Frame.find_by_text('frame2').id },
+        ],
+      }
+    }
+    result = nil
+    assert_difference('Page.find(@page.id).frames.count', 1) do
+      result = MessyBoxSchema.execute(@mutation, context: { current_user: User.find(@user.id) }, variables: variables)
+    end
+
+    assert_nil result.dig('errors')
+    assert_equal 'succeeded', result.dig('data', 'pageAllocate', 'status')
+    allocated_frame1 = Frame.find_by_text('frame1')
+    assert_equal 0, allocated_frame1.x
+    assert_equal 0, allocated_frame1.y
+
+    allocated_frame2 = Frame.find_by_text('frame2')
+    assert_equal 1, allocated_frame2.x
+    assert_equal 1, allocated_frame2.y
+  end
+
   test 'frame collision' do
     @page = @book.pages.first
     variables = {
