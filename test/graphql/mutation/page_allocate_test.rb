@@ -44,10 +44,12 @@ class GraphqlMutationPageAllocateTest < ActiveSupport::TestCase
   end
 
   test 'valid variables' do
-    @page_id = @book.pages.first.id
+    @page = @book.pages.first
     variables = {
       input: {
-        pageId: @page_id,
+        bookId: @page.chapter.book.id,
+        chapterPosition: @page.chapter.position,
+        pageNumber: @page.number,
         frames: [
           { x: 0, y: 0, id: Frame.find_by_text('frame1').id }
         ],
@@ -55,7 +57,7 @@ class GraphqlMutationPageAllocateTest < ActiveSupport::TestCase
     }
     result = nil
 
-    assert_difference('Page.find(@page_id).frames.count', 1) do
+    assert_difference('Page.find(@page.id).frames.count', 1) do
       result = MessyBoxSchema.execute(@mutation, context: { current_user: User.find(@user.id) }, variables: variables)
     end
 
@@ -64,10 +66,12 @@ class GraphqlMutationPageAllocateTest < ActiveSupport::TestCase
   end
 
   test 'frame collision' do
-    @page_id = @book.pages.first.id
+    @page = @book.pages.first
     variables = {
       input: {
-        pageId: @page_id,
+        bookId: @page.chapter.book.id,
+        chapterPosition: @page.chapter.position,
+        pageNumber: @page.number,
         frames: [
           { x: 0, y: 0, id: Frame.find_by_text('frame1').id },
           { x: 0, y: 0, id: Frame.find_by_text('frame2').id },
@@ -76,7 +80,7 @@ class GraphqlMutationPageAllocateTest < ActiveSupport::TestCase
     }
     result = nil
 
-    assert_no_difference('Page.find(@page_id).frames.count') do
+    assert_no_difference('Page.find(@page.id).frames.count') do
       result = MessyBoxSchema.execute(@mutation, context: { current_user: User.find(@user.id) }, variables: variables)
     end
     assert_nil result.dig('errors')
@@ -84,10 +88,12 @@ class GraphqlMutationPageAllocateTest < ActiveSupport::TestCase
   end
 
   test 'frame overflow on height' do
-    @page_id = @book.pages.first.id
+    @page = @book.pages.first
     variables = {
       input: {
-        pageId: @page_id,
+        bookId: @page.chapter.book.id,
+        chapterPosition: @page.chapter.position,
+        pageNumber: @page.number,
         frames: [
           { x: 0, y: 1, id: Frame.find_by_text('frame3').id },
         ],
@@ -95,7 +101,7 @@ class GraphqlMutationPageAllocateTest < ActiveSupport::TestCase
     }
     result = nil
 
-    assert_no_difference('Page.find(@page_id).frames.count') do
+    assert_no_difference('Page.find(@page.id).frames.count') do
       result = MessyBoxSchema.execute(@mutation, context: { current_user: User.find(@user.id) }, variables: variables)
     end
     assert_nil result.dig('errors')
@@ -103,10 +109,12 @@ class GraphqlMutationPageAllocateTest < ActiveSupport::TestCase
   end
 
   test 'frame overflow on width' do
-    @page_id = @book.pages.first.id
+    @page = @book.pages.first
     variables = {
       input: {
-        pageId: @page_id,
+        bookId: @page.chapter.book.id,
+        chapterPosition: @page.chapter.position,
+        pageNumber: @page.number,
         frames: [
           { x: 2, y: 0, id: Frame.find_by_text('frame3').id },
         ],
@@ -114,7 +122,7 @@ class GraphqlMutationPageAllocateTest < ActiveSupport::TestCase
     }
     result = nil
 
-    assert_no_difference('Page.find(@page_id).frames.count') do
+    assert_no_difference('Page.find(@page.id).frames.count') do
       result = MessyBoxSchema.execute(@mutation, context: { current_user: User.find(@user.id) }, variables: variables)
     end
     assert_nil result.dig('errors')

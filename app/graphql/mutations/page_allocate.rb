@@ -7,17 +7,19 @@ module Mutations
       argument :y, Integer, required: true
     end
 
-    argument :page_id, ID, required: true
+    argument :bookId, ID, required: true
+    argument :chapterPosition, Integer, required: true
+    argument :pageNumber, Integer, required: true
     argument :frames, [PageAllocationFrameType], required: true
 
     field :status, String, null: false
     field :frames, [Types::FrameType], null: true
 
-    def resolve(page_id:, frames:)
+    def resolve(bookId:, chapterPosition:, pageNumber:, frames:)
       # need some validation
       page = nil
       Page.transaction do
-        page = Page.lock.find(page_id)
+        page = Page.lock.joins(chapter: :book).find_by(number: pageNumber, chapters: { position: chapterPosition, books: {id: bookId} })
 
         new_frames = []
         frames.each do |frame_param|
