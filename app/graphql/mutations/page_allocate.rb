@@ -17,7 +17,7 @@ module Mutations
       # need some validation
       page = nil
       Page.transaction do
-        page = Page.find(page_id)
+        page = Page.lock.find(page_id)
 
         new_frames = []
         frames.each do |frame_param|
