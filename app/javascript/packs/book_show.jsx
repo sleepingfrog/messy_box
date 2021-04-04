@@ -294,7 +294,7 @@ function Page({chapterPosition}) {
         notAllocatedframes.filter(frame => frame.id !== id)
       )
     }
-
+    if(shadow) { setShadow(null) }
   }
 
   const handleFrameListMouseOver = (e, id) => {
