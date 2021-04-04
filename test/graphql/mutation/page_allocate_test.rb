@@ -83,13 +83,32 @@ class GraphqlMutationPageAllocateTest < ActiveSupport::TestCase
     assert_equal 'failed', result.dig('data', 'pageAllocate', 'status')
   end
 
-  test 'frame overflow' do
+  test 'frame overflow on height' do
     @page_id = @book.pages.first.id
     variables = {
       input: {
         pageId: @page_id,
         frames: [
-          { x: 1, y: 1, id: Frame.find_by_text('frame3').id },
+          { x: 0, y: 1, id: Frame.find_by_text('frame3').id },
+        ],
+      }
+    }
+    result = nil
+
+    assert_no_difference('Page.find(@page_id).frames.count') do
+      result = MessyBoxSchema.execute(@mutation, context: { current_user: User.find(@user.id) }, variables: variables)
+    end
+    assert_nil result.dig('errors')
+    assert_equal 'failed', result.dig('data', 'pageAllocate', 'status')
+  end
+
+  test 'frame overflow on width' do
+    @page_id = @book.pages.first.id
+    variables = {
+      input: {
+        pageId: @page_id,
+        frames: [
+          { x: 2, y: 0, id: Frame.find_by_text('frame3').id },
         ],
       }
     }
