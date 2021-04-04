@@ -35,6 +35,13 @@ module Mutations
           raise ActiveRecord::RecordNotSaved
         end
 
+        old_frames = page.frames
+        old_frames.each do |frame|
+          frame.x = nil
+          frame.y = nil
+          frame.save!
+        end
+
         new_frames.each(&:save!)
 
         page.frames = new_frames
