@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import ReactDOM from 'react-dom';
 import { createCache, createClient } from '../utils/apollo';
-import { ApolloProvider, useQuery, gql  } from '@apollo/client';
+import { ApolloProvider, useQuery, gql, useMutation } from '@apollo/client';
 import {
   BrowserRouter as Router,
   Link,
@@ -46,6 +46,14 @@ const BOOK_QUERY = gql`
           width
         }
       }
+    }
+  }
+`
+
+const PAGE_ALLOCATE = gql`
+  mutation pageAllocate($input: PageAllocateInput!){
+    pageAllocate(input: $input){
+      status
     }
   }
 `
@@ -316,6 +324,31 @@ function Page({chapterPosition}) {
     ])
   }
 
+  const [pageAllocate] = useMutation(PAGE_ALLOCATE)
+
+  const allocation = (e) => {
+    console.log({
+      variables: {
+        input: {
+          bookId: bookData.id,
+          chapterPosition: parseInt(chapterPosition),
+          pageNumber: parseInt(number),
+            frames: allocatedFrames.map(frame => ({ id: frame.id, x: frame.x, y: frame.y }))
+        }
+      }
+    })
+    pageAllocate({
+      variables: {
+        input: {
+          bookId: bookData.id,
+          chapterPosition: parseInt(chapterPosition),
+          pageNumber: parseInt(number),
+            frames: allocatedFrames.map(frame => ({ id: frame.id, x: frame.x, y: frame.y }))
+        }
+      }
+    })
+  }
+
 
   return(
     <>
@@ -336,6 +369,9 @@ function Page({chapterPosition}) {
           />
         </PageContext.Provider>
       </Stage>
+      <div>
+        <button type='button' onClick={allocation}>save!</button>
+      </div>
       <FrameList
         frames={notAllocatedframes}
         handleClick={handleFrameListClick}
