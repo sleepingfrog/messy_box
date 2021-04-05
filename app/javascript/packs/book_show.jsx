@@ -230,15 +230,17 @@ function Page({chapterPosition}) {
   )
   const [allocatedFrames, setAllocatedFrames] = useState([])
   const [notAllocatedframes, setNotAllocatedFrames] = useState([])
+
   useEffect(() => {
     const allocatedIds = data.frames.map(({id}) => id)
-    setAllocatedFrames(
-      bookData.frames.filter(({id}) => allocatedIds.includes(id))
-    )
+    const newAllocatedFrames = bookData.frames.filter(({id}) => allocatedIds.includes(id))
+    setAllocatedFrames(newAllocatedFrames)
+    pushFrameHistory(newAllocatedFrames)
     setNotAllocatedFrames(
       bookData.frames.filter(({id}) => !allocatedIds.includes(id))
     )
   }, [data.frames])
+
   const pageSetting = {
     width: 800,
     height: 600,
@@ -280,11 +282,9 @@ function Page({chapterPosition}) {
   }
   const handleAllocatedFrameDragEnd = (e, id) => {
     const frame = allocatedFrames.find((frame) => frame.id === id)
-    setAllocatedFrames(
-      [
-        ...allocatedFrames.filter((frame) => frame.id !== id), {...frame, x: shadow.x, y: shadow.y}
-      ]
-    )
+    const newAllocatedFrames = [ ...allocatedFrames.filter((frame) => frame.id !== id), {...frame, x: shadow.x, y: shadow.y} ]
+    setAllocatedFrames(newAllocatedFrames)
+    pushFrameHistory(newAllocatedFrames)
     setShadow(null)
   }
 
@@ -294,16 +294,15 @@ function Page({chapterPosition}) {
     const position = FindFreeSpace({width: pageSetting.xCount, height: pageSetting.yCount}, allocatedFrames, frame.frameSize)
     if(position) {
       // unique の制御が必要
-      setAllocatedFrames(
-        [...allocatedFrames, {...frame, x: position.x, y: position.y}]
-      )
+      const newAllocatedFrames = [...allocatedFrames, {...frame, x: position.x, y: position.y}]
+      setAllocatedFrames(newAllocatedFrames)
+      pushFrameHistory(newAllocatedFrames)
       setNotAllocatedFrames(
         notAllocatedframes.filter(frame => frame.id !== id)
       )
     }
     if(shadow) { setShadow(null) }
   }
-
   const handleFrameListMouseOver = (e, id) => {
     // dnd との排他制御が必要
     const frame = bookData.frames.find(frame => frame.id === id)
@@ -318,7 +317,9 @@ function Page({chapterPosition}) {
   }
 
   const handleAllocatedFrameRemove = (e, id) => {
-    setAllocatedFrames(allocatedFrames.filter(frame => frame.id !== id))
+    const newAllocatedFrames = allocatedFrames.filter(frame => frame.id !== id)
+    setAllocatedFrames(newAllocatedFrames)
+    pushFrameHistory(newAllocatedFrames)
     setNotAllocatedFrames([
       ...notAllocatedframes, bookData.frames.find(frame => frame.id === id)
     ])
@@ -340,6 +341,7 @@ function Page({chapterPosition}) {
     })
   }
 
+
   const renderSaveButton = () => {
     if(loading) { return "loading..." }
     if(error) { return "error!" }
@@ -349,6 +351,29 @@ function Page({chapterPosition}) {
     )
   }
 
+  const [frameHistory, pushFrameHistory, {canUndo, undo, canRedo, redo}] = useSimpleUndo(null)
+
+  const renderUndoButton = () => {
+    if(!canUndo) { return null }
+    const handleClick = (e) => {
+      const currentFrames = undo()
+      setAllocatedFrames(currentFrames);
+    }
+    return(
+      <button type='button' onClick={handleClick}>undo</button>
+    )
+  }
+
+  const renderRedoButton = () => {
+    if(!canRedo) { return null }
+    const handleClick = (e) => {
+      const currentFrames = redo()
+      setAllocatedFrames(currentFrames)
+    }
+    return(
+      <button type='button' onClick={handleClick}>redo</button>
+    )
+  }
 
   return(
     <>
@@ -371,6 +396,8 @@ function Page({chapterPosition}) {
       </Stage>
       <div>
         {renderSaveButton()}
+        {renderUndoButton()}
+        {renderRedoButton()}
       </div>
       <FrameList
         frames={notAllocatedframes}
@@ -560,6 +587,41 @@ function FindFreeSpace(pageSize, allocatedFrames, frameSize) {
       }
     }
   }
+}
+
+function useSimpleUndo() {
+  const [history, setHistory] = useState([])
+  const [index, setIndex] = useState(-1)
+
+  const canUndo = index > 0 && history.length > 0
+  const canRedo = index < history.length - 1 && history.length > 0
+
+  const undo = () => {
+    setIndex(index - 1)
+    return(history[index - 1])
+  }
+
+  const redo = () => {
+    setIndex(index + 1)
+    return(history[index + 1])
+  }
+
+  const push = (value) => {
+    if(history.length === index + 1){
+      // tail
+      setHistory([...history, value])
+      setIndex(index + 1)
+    } else {
+      setHistory([...history.slice(0, index + 1), value])
+      setIndex(index + 1)
+    }
+  }
+
+  const currentValue = history[index]
+
+  return(
+    [history, push, { canUndo, undo, canRedo, redo, currentValue }]
+  )
 }
 
 document.addEventListener('DOMContentLoaded', () => {
