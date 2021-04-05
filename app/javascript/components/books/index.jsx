@@ -56,14 +56,18 @@ const BookList = () => {
   if(error) { return( <div> error </div> ) }
 
   return(
-    <div>
+    <ul>
       {
         data.books.nodes.map(({id, title}) => (
-          <div key={id}> {id} : {title} </div>
+          <li key={id}>
+            <a href={"books/" + id}> {id} : {title}</a>
+          </li>
         ))
       }
-      <button type='button' onClick={onFetchMore} >fetch more</button>
-    </div>
+      <li>
+        <button type='button' onClick={onFetchMore} >fetch more</button>
+      </li>
+    </ul>
   )
 
 }
