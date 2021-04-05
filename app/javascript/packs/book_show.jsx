@@ -324,7 +324,7 @@ function Page({chapterPosition}) {
     ])
   }
 
-  const [pageAllocate] = useMutation(PAGE_ALLOCATE)
+  const [pageAllocate, {loading, error}] = useMutation(PAGE_ALLOCATE)
 
   const allocation = (e) => {
     pageAllocate({
@@ -337,6 +337,15 @@ function Page({chapterPosition}) {
         }
       }
     })
+  }
+
+  const renderSaveButton = () => {
+    if(loading) { return "loading..." }
+    if(error) { return "error!" }
+
+    return(
+      <button type='button' onClick={allocation}>save!</button>
+    )
   }
 
 
@@ -360,7 +369,7 @@ function Page({chapterPosition}) {
         </PageContext.Provider>
       </Stage>
       <div>
-        <button type='button' onClick={allocation}>save!</button>
+        {renderSaveButton()}
       </div>
       <FrameList
         frames={notAllocatedframes}
