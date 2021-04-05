@@ -327,16 +327,6 @@ function Page({chapterPosition}) {
   const [pageAllocate] = useMutation(PAGE_ALLOCATE)
 
   const allocation = (e) => {
-    console.log({
-      variables: {
-        input: {
-          bookId: bookData.id,
-          chapterPosition: parseInt(chapterPosition),
-          pageNumber: parseInt(number),
-            frames: allocatedFrames.map(frame => ({ id: frame.id, x: frame.x, y: frame.y }))
-        }
-      }
-    })
     pageAllocate({
       variables: {
         input: {
