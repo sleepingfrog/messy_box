@@ -327,6 +327,7 @@ function Page({chapterPosition}) {
   const [pageAllocate, {loading, error}] = useMutation(PAGE_ALLOCATE)
 
   const allocation = (e) => {
+    // need refetch or update cache ...?
     pageAllocate({
       variables: {
         input: {
