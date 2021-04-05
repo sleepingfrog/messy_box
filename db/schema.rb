@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_01_151544) do
+ActiveRecord::Schema.define(version: 2021_03_28_131356) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,6 +27,66 @@ ActiveRecord::Schema.define(version: 2021_01_01_151544) do
     t.bigint "tag_id"
     t.index ["article_id"], name: "index_articles_tags_on_article_id"
     t.index ["tag_id"], name: "index_articles_tags_on_tag_id"
+  end
+
+  create_table "books", force: :cascade do |t|
+    t.string "title"
+    t.text "description"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "chapters", force: :cascade do |t|
+    t.bigint "book_id", null: false
+    t.integer "page_count"
+    t.integer "page_offset"
+    t.integer "position"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["book_id", "position"], name: "index_chapters_on_book_id_and_position", unique: true
+    t.index ["book_id"], name: "index_chapters_on_book_id"
+  end
+
+  create_table "frame_sizes", force: :cascade do |t|
+    t.text "name", null: false
+    t.integer "width", null: false
+    t.integer "height", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "frames", force: :cascade do |t|
+    t.bigint "frame_size_id", null: false
+    t.bigint "page_id"
+    t.bigint "book_id", null: false
+    t.integer "x"
+    t.integer "y"
+    t.text "text"
+    t.string "color"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["book_id"], name: "index_frames_on_book_id"
+    t.index ["frame_size_id"], name: "index_frames_on_frame_size_id"
+    t.index ["page_id"], name: "index_frames_on_page_id"
+  end
+
+  create_table "page_sizes", force: :cascade do |t|
+    t.integer "width", null: false
+    t.integer "height", null: false
+    t.string "name", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "pages", force: :cascade do |t|
+    t.bigint "chapter_id", null: false
+    t.integer "number"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.bigint "page_size_id"
+    t.index ["chapter_id", "number"], name: "index_pages_on_chapter_id_and_number", unique: true
+    t.index ["chapter_id"], name: "index_pages_on_chapter_id"
+    t.index ["page_size_id"], name: "index_pages_on_page_size_id"
   end
 
   create_table "tags", force: :cascade do |t|
@@ -59,5 +119,10 @@ ActiveRecord::Schema.define(version: 2021_01_01_151544) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "chapters", "books"
+  add_foreign_key "frames", "books"
+  add_foreign_key "frames", "frame_sizes"
+  add_foreign_key "frames", "pages"
+  add_foreign_key "pages", "chapters"
   add_foreign_key "user_todos", "users"
 end

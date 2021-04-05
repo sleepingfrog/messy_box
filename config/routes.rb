@@ -18,4 +18,10 @@ Rails.application.routes.draw do
   namespace :konva_sample do
     root action: :index
   end
+
+  resources :books, only: [:index] do
+    member do
+      get :show, path: '(/chapters/:position(/pages/:number))'
+    end
+  end
 end
