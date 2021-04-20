@@ -7,3 +7,14 @@ Imitating Martian technology.
 ```sh
 dip provision
 ```
+
+
+## testing
+
+```sh
+dip test
+```
+### system test
+```sh
+dip up rails-test
+```

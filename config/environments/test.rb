@@ -55,4 +55,7 @@ Rails.application.configure do
 
   # Annotate rendered view with file names.
   # config.action_view.annotate_rendered_view_with_filenames = true
+  if ENV["APP_HOST"]
+    config.hosts << ENV["APP_HOST"]
+  end
 end
