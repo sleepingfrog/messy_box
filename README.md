@@ -14,7 +14,9 @@ dip provision
 ```sh
 dip test
 ```
-### system test
+## system test
 ```sh
 dip up rails-test
 ```
+debuging ``vnc://localhost:5900``
+
