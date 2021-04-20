@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class ElasticsearchRepository
   attr_reader :model, :query
   attr_accessor :size, :from
@@ -32,7 +33,7 @@ class ElasticsearchRepository
     fetch.response.dig('aggregations', 'tags', 'buckets').each_with_object([]).map do |bucket|
       {
         key: bucket['key'],
-        count: bucket['doc_count']
+        count: bucket['doc_count'],
       }
     end
   end
@@ -40,15 +41,15 @@ class ElasticsearchRepository
   private
 
     def build_request
-      if query.blank?
-        request = {
+      request = if query.blank?
+        {
           query: {
-            match_all: {}
-          }
+            match_all: {},
+          },
         }
       else
-        request = {
-          query: query
+        {
+          query: query,
         }
       end
 
@@ -67,8 +68,8 @@ class ElasticsearchRepository
               field: 'tags.name',
               size: 10,
             },
-          }
-        }
+          },
+        },
       })
 
       request

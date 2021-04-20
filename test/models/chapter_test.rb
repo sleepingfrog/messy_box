@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # == Schema Information
 #
 # Table name: chapters
@@ -22,7 +23,6 @@
 require 'test_helper'
 
 class ChapterTest < ActiveSupport::TestCase
-
   test 'page_order' do
     book = Book.new
     page_size = PageSize.new(

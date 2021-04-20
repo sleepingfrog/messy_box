@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Types
   class ArticleConnectionWithTotalCountType < GraphQL::Types::Relay::BaseConnection
     edge_type(ArticleEdgeType)

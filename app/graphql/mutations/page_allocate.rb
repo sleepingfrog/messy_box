@@ -1,6 +1,6 @@
+# frozen_string_literal: true
 module Mutations
   class PageAllocate < BaseMutation
-
     class PageAllocationFrameType < Types::BaseInputObject
       argument :id, ID, required: true
       argument :x, Integer, required: true
@@ -19,7 +19,7 @@ module Mutations
       # need some validation
       page = nil
       Page.transaction do
-        page = Page.lock.joins(chapter: :book).find_by(number: pageNumber, chapters: { position: chapterPosition, books: {id: bookId} })
+        page = Page.lock.joins(chapter: :book).find_by(number: pageNumber, chapters: { position: chapterPosition, books: { id: bookId } })
 
         new_frames = []
         frames.each do |frame_param|
@@ -33,7 +33,7 @@ module Mutations
           raise ActiveRecord::RecordNotSaved
         end
 
-        if new_frames.combination(2).any? { |(frame, other)| (frame.x <= other.x + other.frame_size.width - 1) && (frame.y <= other.y + other.frame_size.height - 1) && ( other.x <= frame.x + frame.frame_size.width - 1) && (other.y <= frame.y + frame.frame_size.height - 1)  }
+        if new_frames.combination(2).any? { |(frame, other)| (frame.x <= other.x + other.frame_size.width - 1) && (frame.y <= other.y + other.frame_size.height - 1) && (other.x <= frame.x + frame.frame_size.width - 1) && (other.y <= frame.y + frame.frame_size.height - 1) }
           raise ActiveRecord::RecordNotSaved
         end
 
@@ -57,7 +57,7 @@ module Mutations
       }
     rescue => e
       {
-        status: 'failed'
+        status: 'failed',
       }
     end
   end

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # == Schema Information
 #
 # Table name: pages
@@ -28,7 +29,7 @@ class Page < ApplicationRecord
     uniqueness: { scope: :chapter },
     numericality: {
       greater_than_or_equal_to: 1,
-      less_than_or_equal_to: lambda { |record| record.chapter.page_count }
+      less_than_or_equal_to: lambda { |record| record.chapter.page_count },
     }
 
   scope :book_page_number, lambda { |numbers|

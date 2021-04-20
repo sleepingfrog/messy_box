@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # == Schema Information
 #
 # Table name: pages
@@ -83,7 +84,7 @@ class PageTest < ActiveSupport::TestCase
     pages = book.pages.book_page_number([2, 3, 4])
     assert_equal(
       [[1, 0, 2], [1, 0, 3], [2, 3, 1]],
-      pages.map{ |page| [page.chapter.position, page.chapter.page_offset, page.number] }
+      pages.map { |page| [page.chapter.position, page.chapter.page_offset, page.number] }
     )
 
     page = book.pages.find_by_book_page_number(5)

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # == Schema Information
 #
 # Table name: articles
@@ -34,13 +35,17 @@ class Article < ApplicationRecord
 
   def self.create_index!
     client = __elasticsearch__.client
-    client.indices.delete(index: self.index_name) rescue nil
+    begin
+      client.indices.delete(index: index_name)
+    rescue
+      nil
+    end
 
     client.indices.create(
-      index: self.index_name,
+      index: index_name,
       body: {
-        settings: self.settings.to_hash,
-        mappings: self.mappings.to_hash,
+        settings: settings.to_hash,
+        mappings: mappings.to_hash,
       }
     )
   end

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'test_helper'
 
 class GraphqlMutationPageAllocateTest < ActiveSupport::TestCase
@@ -51,9 +52,9 @@ class GraphqlMutationPageAllocateTest < ActiveSupport::TestCase
         chapterPosition: @page.chapter.position,
         pageNumber: @page.number,
         frames: [
-          { x: 0, y: 0, id: Frame.find_by_text('frame1').id }
+          { x: 0, y: 0, id: Frame.find_by_text('frame1').id },
         ],
-      }
+      },
     }
     result = nil
 
@@ -82,7 +83,7 @@ class GraphqlMutationPageAllocateTest < ActiveSupport::TestCase
           { x: 0, y: 0, id: Frame.find_by_text('frame1').id },
           { x: 1, y: 1, id: Frame.find_by_text('frame2').id },
         ],
-      }
+      },
     }
     result = nil
     assert_difference('Page.find(@page.id).frames.count', 1) do
@@ -111,7 +112,7 @@ class GraphqlMutationPageAllocateTest < ActiveSupport::TestCase
           { x: 0, y: 0, id: Frame.find_by_text('frame1').id },
           { x: 0, y: 0, id: Frame.find_by_text('frame2').id },
         ],
-      }
+      },
     }
     result = nil
 
@@ -132,7 +133,7 @@ class GraphqlMutationPageAllocateTest < ActiveSupport::TestCase
         frames: [
           { x: 0, y: 1, id: Frame.find_by_text('frame3').id },
         ],
-      }
+      },
     }
     result = nil
 
@@ -153,7 +154,7 @@ class GraphqlMutationPageAllocateTest < ActiveSupport::TestCase
         frames: [
           { x: 2, y: 0, id: Frame.find_by_text('frame3').id },
         ],
-      }
+      },
     }
     result = nil
 

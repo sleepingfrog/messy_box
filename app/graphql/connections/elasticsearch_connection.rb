@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Connections
   class ElasticsearchConnection < GraphQL::Relay::BaseConnection
     def cursor_from_node(item)
@@ -14,9 +15,9 @@ module Connections
       es_total = total_count
 
       if es_total && paged_nodes.from.present? && paged_nodes.size.present?
-        return (paged_nodes.from + paged_nodes.size) < es_total
+        (paged_nodes.from + paged_nodes.size) < es_total
       else
-        return false
+        false
       end
     end
 
@@ -25,9 +26,9 @@ module Connections
 
       if es_total && paged_nodes.from.present? && paged_nodes.size.present?
         from_cursor = paged_nodes.from - paged_nodes.size
-        return 0 <= from_cursor && from_cursor <= es_total
+        0 <= from_cursor && from_cursor <= es_total
       else
-        return false
+        false
       end
     end
 
@@ -58,7 +59,7 @@ module Connections
               items.size = last
             end
           else
-            from = items.from + total_count  - [last, total_count].min
+            from = items.from + total_count - [last, total_count].min
             items.from = from
             items.size = last
           end
@@ -79,10 +80,10 @@ module Connections
         end
 
         if before && after
-          if offset_from_cursor(after) < offset_from_cursor(before)
-            @sliced_nodes.size = offset_from_cursor(before) - offset_from_cursor(after) - 1
+          @sliced_nodes.size = if offset_from_cursor(after) < offset_from_cursor(before)
+            offset_from_cursor(before) - offset_from_cursor(after) - 1
           else
-            @sliced_nodes.size = 0
+            0
           end
 
         elsif before

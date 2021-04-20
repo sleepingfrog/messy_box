@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Types
   class PageType < Types::BaseObject
     field :number, Integer, null: false

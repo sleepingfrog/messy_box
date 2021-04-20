@@ -17,28 +17,28 @@ module Types
 
     def articles(query: nil)
       value_query = if query&.value.present?
-                {
-                  multi_match: {
-                    fields: ['title', 'body'],
-                    type: 'cross_fields',
-                    operator: 'and',
-                    query: query.value,
-                  }
-                }
-              end
+        {
+          multi_match: {
+            fields: ['title', 'body'],
+            type: 'cross_fields',
+            operator: 'and',
+            query: query.value,
+          },
+        }
+      end
 
       tags_query = if query&.tags.present?
-                     {
-                       terms: {
-                         'tags.name': query.tags
-                       }
-                     }
-                   end
+        {
+          terms: {
+            'tags.name': query.tags,
+          },
+        }
+      end
 
       query = {
         bool: {
-          must: [value_query, tags_query].compact
-        }
+          must: [value_query, tags_query].compact,
+        },
       }
 
       ElasticsearchRepository.new(Article, query)

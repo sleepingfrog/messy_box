@@ -30,7 +30,7 @@ print_seed('article') do
   end
 
   Article.create_index!
-  Article.__elasticsearch__.import scope: :with_tags
+  Article.__elasticsearch__.import(scope: :with_tags)
 end
 
 print_seed('frame_size') do
@@ -47,7 +47,7 @@ end
 print_seed('book') do
   page_sizes = [
     PageSize.create!(name: 'name1', width: 4, height: 4),
-    PageSize.create!(name: 'name2', width: 10, height: 8)
+    PageSize.create!(name: 'name2', width: 10, height: 8),
   ]
   book = Book.new(title: 'title1', description: 'description1')
   [
