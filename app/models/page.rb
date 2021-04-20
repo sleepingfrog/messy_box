@@ -33,7 +33,7 @@ class Page < ApplicationRecord
 
   scope :book_page_number, lambda { |numbers|
     joins(:chapter).where(
-      (Chapter.arel_attribute(:page_offset) + Page.arel_attribute(:number)).in(numbers)
+      (Chapter.arel_table[:page_offset] + Page.arel_table[:number]).in(numbers)
     )
   }
 
