@@ -5,7 +5,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '2.7.2'
 
 gem 'rails', '~> 6.1'
-gem 'sprockets', '~> 3.7.2'
+gem 'sprockets', '~> 3.7.2' # graphiql's assets required old sprockets
 
 # Use postgresql as the database for Active Record
 gem 'pg', '>= 0.18', '< 2.0'
