@@ -76,3 +76,4 @@ provision:
   - dip bundle install
   - dip yarn install
   - dip rake db:setup
+  - dip RAILS_ENV=test rails db:create
