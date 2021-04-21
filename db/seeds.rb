@@ -21,6 +21,7 @@ print_seed('todo seed') do
 end
 
 print_seed('article') do
+  Article.create_index!
   1.upto(200) do |i|
     a = Article.new(title: "Title#{i}", body: FFaker::LoremJA.paragraph)
     1.upto(random.rand(5)) do
@@ -29,7 +30,7 @@ print_seed('article') do
     a.save!
   end
 
-  Article.create_index!
+  Sidekiq::Queue.new.clear
   Article.__elasticsearch__.import(scope: :with_tags)
 end
 
