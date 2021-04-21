@@ -37,9 +37,11 @@ x-backend: &backend
     EDITOR: vi
     ELASTICSEARCH_HOST: es
     ELASTICSEARCH_PORT: 9200
+    REDIS_URL: redis://redis:6379
   depends_on:
     - postgres
     - es
+    - redis
 
 services:
   runner:
@@ -130,6 +132,7 @@ services:
       - postgres
       - es
       - selenium
+      - redis
 
   selenium:
     image: selenium/standalone-chrome-debug
@@ -138,6 +141,10 @@ services:
     ports:
     - "4444:4444"
     - "5900:5900"
+
+  sidekiq:
+    <<: *backend
+    command: bundle exec sidekiq -C config/sidekiq.yml
 
 volumes:
   bundle:

@@ -1,4 +1,6 @@
 # frozen_string_literal: true
+require 'sidekiq/web'
+
 Rails.application.routes.draw do
   namespace :users do
     resources :todos, only: [:index]
@@ -23,5 +25,9 @@ Rails.application.routes.draw do
     member do
       get :show, path: '(/chapters/:position(/pages/:number))'
     end
+  end
+
+  if Rails.env.development?
+    mount Sidekiq::Web => "/sidekiq"
   end
 end
