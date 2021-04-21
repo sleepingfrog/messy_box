@@ -12,11 +12,11 @@ dip provision
 ## testing
 
 ```sh
-dip test
+dip minitest
 ```
 ## system test
 ```sh
-dip up rails-test
+dip up system-test
 ```
 debuging ``vnc://localhost:5900``
 

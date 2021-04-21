@@ -47,7 +47,7 @@ interaction:
     command: yarn
     compose_run_options: [no-deps]
 
-  test:
+  minitest:
     description: Run Rails tests
     service: runner
     environment:
