@@ -231,10 +231,13 @@ function Page({chapterPosition}) {
   const [allocatedFrames, setAllocatedFrames] = useState([])
   const [notAllocatedframes, setNotAllocatedFrames] = useState([])
 
+  const [frameHistory, pushFrameHistory, resetFrameHistory, {canUndo, undo, canRedo, redo}] = useSimpleUndo([])
+
   useEffect(() => {
     const allocatedIds = data.frames.map(({id}) => id)
     const newAllocatedFrames = bookData.frames.filter(({id}) => allocatedIds.includes(id))
     setAllocatedFrames(newAllocatedFrames)
+    resetFrameHistory()
     pushFrameHistory(newAllocatedFrames)
     setNotAllocatedFrames(
       bookData.frames.filter(({id}) => !allocatedIds.includes(id))
@@ -351,7 +354,6 @@ function Page({chapterPosition}) {
     )
   }
 
-  const [frameHistory, pushFrameHistory, {canUndo, undo, canRedo, redo}] = useSimpleUndo(null)
 
   const renderUndoButton = () => {
     if(!canUndo) { return null }
@@ -606,21 +608,26 @@ function useSimpleUndo() {
     return(history[index + 1])
   }
 
+  const reset = () => {
+    setIndex(-1)
+    setHistory([])
+  }
+
   const push = (value) => {
     if(history.length === index + 1){
       // tail
-      setHistory([...history, value])
-      setIndex(index + 1)
+      setHistory(prev => [...prev, value])
+      setIndex(prev => prev + 1)
     } else {
       setHistory([...history.slice(0, index + 1), value])
-      setIndex(index + 1)
+      setIndex(prev => prev + 1)
     }
   }
 
   const currentValue = history[index]
 
   return(
-    [history, push, { canUndo, undo, canRedo, redo, currentValue }]
+    [history, push, reset, {canUndo, undo, canRedo, redo, currentValue }]
   )
 }
 
