@@ -1,0 +1,7 @@
+class ElasticUpdateDocJob < ApplicationJob
+  queue_as :default
+
+  def perform(model)
+    model.__elasticsearch__.update_document
+  end
+end

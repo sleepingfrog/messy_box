@@ -49,4 +49,8 @@ class Article < ApplicationRecord
       }
     )
   end
+
+  after_commit lambda { ElasticIndexDocJob.perform_later(self)  }, on: :create
+  after_commit lambda { ElasticUpdateDocJob.perform_later(self) }, on: :update
+  after_commit lambda { ElasticDeleteDocJob.perform_later(self) }, on: :destroy
 end
