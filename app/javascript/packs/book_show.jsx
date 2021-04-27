@@ -360,6 +360,10 @@ function Page({chapterPosition}) {
     const handleClick = (e) => {
       const currentFrames = undo()
       setAllocatedFrames(currentFrames);
+      const allocatedIds =  currentFrames.map( frame => frame.id )
+      setNotAllocatedFrames(
+        bookData.frames.filter(({id}) => !allocatedIds.includes(id))
+      )
     }
     return(
       <button type='button' onClick={handleClick}>undo</button>
@@ -371,6 +375,10 @@ function Page({chapterPosition}) {
     const handleClick = (e) => {
       const currentFrames = redo()
       setAllocatedFrames(currentFrames)
+      const allocatedIds =  currentFrames.map( frame => frame.id )
+      setNotAllocatedFrames(
+        bookData.frames.filter(({id}) => !allocatedIds.includes(id))
+      )
     }
     return(
       <button type='button' onClick={handleClick}>redo</button>
