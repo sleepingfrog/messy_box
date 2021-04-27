@@ -1,5 +1,7 @@
 development:
-  adapter: async
+  adapter: redis
+  url: <%= ENV.fetch("REDIS_URL") %>
+  channel_prefix: messy_box_development
 
 test:
   adapter: test
