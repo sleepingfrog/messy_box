@@ -9,10 +9,10 @@ const App = () => {
     setReceive(prev => !prev);
   }
 
-  return(
+  return (
     <div>
-      receive { receive.toString() }<button type='button' onClick={onClick} >or not</button>
-      { receive && <Notification /> }
+      receive {receive.toString()}<button type='button' onClick={onClick} >or not</button>
+      {receive && <Notification />}
     </div>
   )
 }
@@ -25,15 +25,15 @@ const Notification = () => {
     setNotifications((prev) => {
       console.log('received', data)
       if (prev.length >= NOTIFICATION_SIZE) {
-        return([...prev.slice(prev.length - (NOTIFICATION_SIZE - 1)), data])
+        return ([...prev.slice(prev.length - (NOTIFICATION_SIZE - 1)), data])
       } else {
-        return([...prev, data])
+        return ([...prev, data])
       }
     })
   }
   const renderNotifications = () => {
-    return(
-      notifications.map(data => <div key={data}>{data}</div> )
+    return (
+      notifications.map(data => <div key={data}>{data}</div>)
     )
   }
 
@@ -41,9 +41,9 @@ const Notification = () => {
     const subscription = consumer.subscriptions.create({
       channel: 'AsyncNotificationChannel'
     },
-    {
-      received(data) { appendNotification(data) }
-    })
+      {
+        received(data) { appendNotification(data) }
+      })
 
     const cleanup = () => {
       console.log('cleanup!')
@@ -53,10 +53,10 @@ const Notification = () => {
     return cleanup;
   }, [])
 
-  return(
+  return (
     <div>
       Cable
-      { renderNotifications() }
+      {renderNotifications()}
     </div>
   )
 }
