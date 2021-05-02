@@ -2,6 +2,10 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
+  namespace 'article_search' do
+    root action: :index
+  end
+
   namespace :users do
     resources :todos, only: [:index]
   end

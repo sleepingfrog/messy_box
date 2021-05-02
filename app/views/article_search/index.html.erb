@@ -1,0 +1,73 @@
+<h1>ArticleSearch#index</h1>
+<p>Find me in app/views/article_search/index.html.erb</p>
+
+
+<div class='form'>
+  <%= form_with(model: @search_form, url: article_search_root_path, method: :get) do |f| %>
+    <%= f.text_field :query %>
+    <%= f.collection_check_boxes(:tags, Tag.all, :name, :name, include_blank: false) %>
+    <%= f.submit 'search' %>
+  <% end %>
+</div>
+
+<div class='pagenation'>
+  total_count: <%= @result.response.dig('hits', 'total', 'value') %>
+  <% article_search_pagination(@result) do |paginator| %>
+    <ul>
+    <% paginator.prev_page do |page| %>
+       <li>
+        <%= link_to("<<", url_for(@search_form.model_name.param_key => page.definition)) %>
+       </li>
+    <% end %>
+    <% paginator.first_page do |page| %>
+       <li>
+        <%= link_to("FIRST_PAGE!", url_for(@search_form.model_name.param_key => page.definition)) %>
+       </li>
+    <% end %>
+    <% paginator.first_ellipsis do %>
+      <li>
+        <%= "..." %>
+      </li>
+    <% end %>
+    <% paginator.in_surround do |page|%>
+      <li>
+        <%= link_to(page.current? ? "current_page" : page.number, url_for(@search_form.model_name.param_key => page.definition)) %>
+      </li>
+    <% end %>
+    <% paginator.last_ellipsis do %>
+      <li>
+        <%= "..." %>
+      </li>
+    <% end %>
+    <% paginator.last_page do |page| %>
+       <li>
+        <%= link_to("LAST_PAGE!", url_for(@search_form.model_name.param_key => page.definition)) %>
+       </li>
+    <% end %>
+    <% paginator.next_page do |page| %>
+       <li>
+        <%= link_to(">>", url_for(@search_form.model_name.param_key => page.definition)) %>
+       </li>
+    <% end %>
+    </ul>
+  <% end %>
+<div>
+-----------------
+
+<div class='archive'>
+  <% @articles.each do |article| %>
+    <div class='article'>
+      title: <%= article.title %>
+      <ul>
+        <% article.tags.each do |tag| %>
+          <li>
+            <%= tag.name %>
+          </li>
+        <% end %>
+      </ul>
+      <div>
+        <%= article.body %>
+      </div>
+    </div>
+  <% end %>
+</div>
