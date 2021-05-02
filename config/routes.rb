@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   namespace 'article_search' do
     root action: :index
   end
-
+  get 'async_notification/index'
   namespace :users do
     resources :todos, only: [:index]
   end
