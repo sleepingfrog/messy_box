@@ -8,6 +8,6 @@ class ArticleSearchController < ApplicationController
   private
 
   def search_params
-    params.fetch(:article_search, {}).permit(:query, tags: [])
+    params.fetch(:article_search, {}).permit(:query, :page, :size, tags: [])
   end
 end
