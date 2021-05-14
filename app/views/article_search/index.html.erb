@@ -12,16 +12,16 @@
 
 <div class='pagenation'>
   total_count: <%= @result.response.dig('hits', 'total', 'value') %>
-  <% article_search_pagination(@result) do |paginator| %>
+  <% article_search_pagination(@search_form) do |paginator| %>
     <ul>
     <% paginator.prev_page do |page| %>
        <li>
-        <%= link_to("<<", url_for(@search_form.model_name.param_key => page.definition)) %>
+        <%= link_to("<<", url_for(@search_form.model_name.param_key => page.form_conditions)) %>
        </li>
     <% end %>
     <% paginator.first_page do |page| %>
        <li>
-        <%= link_to("FIRST_PAGE!", url_for(@search_form.model_name.param_key => page.definition)) %>
+        <%= link_to("FIRST_PAGE!", url_for(@search_form.model_name.param_key => page.form_conditions)) %>
        </li>
     <% end %>
     <% paginator.first_ellipsis do %>
@@ -31,7 +31,7 @@
     <% end %>
     <% paginator.in_surround do |page|%>
       <li>
-        <%= link_to(page.current? ? "current_page" : page.number, url_for(@search_form.model_name.param_key => page.definition)) %>
+        <%= link_to(page.current? ? "current_page" : page.number, url_for(@search_form.model_name.param_key => page.form_conditions)) %>
       </li>
     <% end %>
     <% paginator.last_ellipsis do %>
@@ -41,12 +41,12 @@
     <% end %>
     <% paginator.last_page do |page| %>
        <li>
-        <%= link_to("LAST_PAGE!", url_for(@search_form.model_name.param_key => page.definition)) %>
+        <%= link_to("LAST_PAGE!", url_for(@search_form.model_name.param_key => page.form_conditions)) %>
        </li>
     <% end %>
     <% paginator.next_page do |page| %>
        <li>
-        <%= link_to(">>", url_for(@search_form.model_name.param_key => page.definition)) %>
+        <%= link_to(">>", url_for(@search_form.model_name.param_key => page.form_conditions)) %>
        </li>
     <% end %>
     </ul>

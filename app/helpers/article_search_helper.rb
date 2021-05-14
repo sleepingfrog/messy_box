@@ -4,9 +4,10 @@ module ArticleSearchHelper
   end
 
   class ArticleSearchPaginator
-    attr_reader :result, :options
-    def initialize(result, options = {}, &block)
-      @result = result
+    attr_reader :result, :options, :search_form
+    def initialize(search_form, options = {}, &block)
+      @search_form = search_form
+      @result = search_form.result
       @options = options
     end
 
@@ -104,27 +105,28 @@ module ArticleSearchHelper
     }
     def options
       DEFAULT_OPTIONS.merge(@options).merge({
-        definition: definition,
+        form_conditions: form_conditions,
         current_page: current_page,
         last_page_number: last_page_number
       })
     end
 
-    def definition
-      result.search.definition.dig(:body)
+
+    def form_conditions
+      search_form.attributes
     end
 
 
     class Page
-      attr_reader :number, :definition, :options
+      attr_reader :number, :form_conditions, :options
       def initialize(number, options)
         @number = number
-        @definition = options.delete(:definition)
+        @form_conditions = options.delete(:form_conditions)
         @options = options
       end
 
-      def definition
-        @definition.merge("page" => number)
+      def form_conditions
+        @form_conditions.merge("page" => number)
       end
 
       def last?
