@@ -22,6 +22,16 @@ gem 'redis', '~> 4.0'
 # Use Active Model has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
+gem 'cells-erb'
+gem 'cells-rails'
+gem 'trailblazer-cells'
+gem 'view_component'
+gem 'devise', '~> 4.7'
+gem 'elasticsearch-model', '~> 7.1'
+gem 'elasticsearch-rails', '~> 7.1'
+gem 'graphql', '~> 1.11'
+gem 'graphql-batch', '~> 0.4.3'
+gem 'marginalia'
 gem 'sidekiq'
 
 # Reduces boot times through caching; required in config/boot.rb
@@ -60,17 +70,4 @@ end
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
-gem 'marginalia'
-gem 'devise', '~> 4.7'
-gem 'view_component', require: 'view_component/engine'
-gem 'trailblazer-cells'
-gem 'cells-erb'
-gem 'cells-rails'
-gem 'graphql', '~> 1.11'
-
-gem 'elasticsearch-model', '~> 7.1'
-
-gem 'elasticsearch-rails', '~> 7.1'
-
-gem 'graphql-batch', '~> 0.4.3'
 gem 'redis-rails'
