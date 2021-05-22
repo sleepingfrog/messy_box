@@ -30,7 +30,7 @@ gem 'bootsnap', '>= 1.4.2', require: false
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
-  gem "factory_bot_rails", "~> 6.1"
+  gem 'factory_bot_rails', '~> 6.1'
   gem 'ffaker'
 end
 
@@ -53,24 +53,24 @@ group :test do
   gem 'capybara', '>= 2.15'
   gem 'selenium-webdriver'
   # Easy installation and use of web drivers to run system tests with browsers
-  gem 'webdrivers', require: !ENV["SELENIUM_HUB_URL"]
-  gem "minitest-reporters", "~> 1.4"
+  gem 'webdrivers', require: !ENV['SELENIUM_HUB_URL']
+  gem 'minitest-reporters', '~> 1.4'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'marginalia'
-gem "devise", "~> 4.7"
+gem 'devise', '~> 4.7'
 gem 'view_component', require: 'view_component/engine'
 gem 'trailblazer-cells'
 gem 'cells-erb'
 gem 'cells-rails'
-gem "graphql", "~> 1.11"
+gem 'graphql', '~> 1.11'
 
-gem "elasticsearch-model", "~> 7.1"
+gem 'elasticsearch-model', '~> 7.1'
 
-gem "elasticsearch-rails", "~> 7.1"
+gem 'elasticsearch-rails', '~> 7.1'
 
-gem "graphql-batch", "~> 0.4.3"
-gem "redis-rails"
+gem 'graphql-batch', '~> 0.4.3'
+gem 'redis-rails'
