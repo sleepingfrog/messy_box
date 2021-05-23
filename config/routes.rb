@@ -2,22 +2,22 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
+
+  devise_for :users
+  root 'home#index'
+
+  post "/graphql", to: "graphql#execute"
+
+  resources :articles, only: [:index]
   namespace 'article_search' do
     root action: :index
   end
+
   get 'async_notification/index'
+
   namespace :users do
     resources :todos, only: [:index]
   end
-
-  resources :articles, only: [:index]
-
-  if Rails.env.development?
-    mount GraphiQL::Rails::Engine, at: "/graphiql", graphql_path: "/graphql"
-  end
-  post "/graphql", to: "graphql#execute"
-  devise_for :users
-  root 'home#index'
 
   get 'view_component_sample/index'
 
@@ -33,5 +33,6 @@ Rails.application.routes.draw do
 
   if Rails.env.development?
     mount Sidekiq::Web => "/sidekiq"
+    mount GraphiQL::Rails::Engine, at: "/graphiql", graphql_path: "/graphql"
   end
 end
