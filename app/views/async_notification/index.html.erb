@@ -3,3 +3,16 @@
 
 <div id='root'></div>
 <%= javascript_pack_tag 'async_notification' %>
+
+<p>
+複数ページ開いて
+consoleから
+<pre>
+1.upto(100) do |i|
+  sleep(0.4)
+  ActionCable.server.broadcast('async_notification', "message-#{i}")
+end
+</pre>
+みたいな感じで
+</p>
+
