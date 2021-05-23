@@ -1,7 +1,23 @@
 <h1>Home#index</h1>
 <p>Find me in app/views/home/index.html.erb</p>
 
-<%= link_to('view_component', view_component_sample_index_path) %>
-<%= link_to('todo', users_todos_path) %>
-<%= link_to('articles', articles_path) %>
-<%= link_to('books', books_path) %>
+<ol>
+  <li>
+    <%= link_to('view_component', view_component_sample_index_path) %>
+  </li>
+  <li>
+    <%= link_to('todo graphql', users_todos_path) %>
+  </li>
+  <li>
+    <%= link_to('articles graphql', articles_path) %>
+  </li>
+  <li>
+    <%= link_to('articles model', article_search_root_path) %>
+  </li>
+  <li>
+    <%= link_to('books', books_path) %>
+  </li>
+  <li>
+    <%= link_to('cable + react', async_notification_index_path) %>
+  </li>
+</ol>
