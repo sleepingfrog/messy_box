@@ -1,3 +1,21 @@
 <h1><%= @history.created_at %></h1>
 
 <%= link_to(image_tag(rails_storage_proxy_url(@history.image.variant(resize: '250x250'))), rails_storage_proxy_url(@history.image)) %>
+
+<% if @history.comparison_with_before.present? %>
+  <div class="before">
+    <h2>before</h2>
+    <% comparison_with_before = @history.comparison_with_before %>
+    <p><%= comparison_with_before.diff %></p>
+    <%= link_to(image_tag(rails_storage_proxy_url(comparison_with_before.image.variant(resize: '250x250'))), rails_storage_proxy_url(comparison_with_before.image)) %>
+  </div>
+<% end %>
+
+<% if @history.comparison_with_after.present? %>
+  <div class="after">
+    <h2>after</h2>
+    <% comparison_with_after = @history.comparison_with_after %>
+    <p><%= comparison_with_after.diff %></p>
+    <%= link_to(image_tag(rails_storage_proxy_url(comparison_with_after.image.variant(resize: '250x250'))), rails_storage_proxy_url(comparison_with_after.image)) %>
+  </div>
+<% end %>
