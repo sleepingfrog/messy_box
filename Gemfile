@@ -73,3 +73,4 @@ gem 'aws-sdk-s3', require: false
 gem 'selenium-webdriver'
 gem 'webdrivers', require: !ENV['SELENIUM_HUB_URL']
 gem 'rmagick'
+gem 'image_processing'
