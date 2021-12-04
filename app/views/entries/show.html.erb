@@ -1,0 +1,11 @@
+<h1><%= @entry.url %></h1>
+
+<% if @entry.histories.present? %>
+  <ul>
+    <% @entry.histories.each do |history| %>
+      <li>
+        <%= link_to I18n.l(history.created_at, format: :default), history_path(history) %>
+      </li>
+    <% end %>
+  </ul>
+<% end %>

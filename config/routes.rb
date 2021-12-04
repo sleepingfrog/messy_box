@@ -31,6 +31,9 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :entries, only: %i[ index show ]
+  resources :histories, only: %i[ show ]
+
   if Rails.env.development?
     mount Sidekiq::Web => "/sidekiq"
     mount GraphiQL::Rails::Engine, at: "/graphiql", graphql_path: "/graphql"
