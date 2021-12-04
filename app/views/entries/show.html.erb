@@ -1,3 +1,4 @@
+<p id="notice"><%= notice %></p>
 <h1><%= @entry.url %></h1>
 
 <%= button_to 'create history', create_history_entry_path(@entry), method: :post %>
@@ -11,3 +12,5 @@
     <% end %>
   </ul>
 <% end %>
+
+<%= link_to 'Back', entries_path %>

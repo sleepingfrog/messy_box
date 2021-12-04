@@ -31,7 +31,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :entries, only: %i[ index show ] do
+  resources :entries, only: %i[ index show new create ] do
     member do
       post 'create_history', action: :create_history
     end

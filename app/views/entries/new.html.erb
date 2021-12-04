@@ -1,0 +1,29 @@
+<h1>New Entry</h1>
+
+<%= form_with(model: @entry) do |form| %>
+  <% if @entry.errors.any? %>
+    <h2><%= pluralize(@entry.errors.count, "error") %></h2>
+    <ul>
+      <% @entry.errors.each do |error| %>
+        <li><%= error.full_message %></li>
+      <% end %>
+    </ul>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :url %>
+    <%= form.text_field :url %>
+  </div>
+
+  <div class="field">
+    <%= form.label :wait %>
+    <%= form.text_field :wait %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>
+
+
+<%= link_to 'Back', entries_path %>
