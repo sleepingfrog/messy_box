@@ -8,6 +8,9 @@ class CreateHistoryJob < ApplicationJob
       history.image.attach(io: screenshot(entry.url, wait_time: entry.wait_time), filename: 'screenshot.png')
       history.save!
     end
+
+    histories = entry.histories.last(2)
+    CreateComparisonJob.perform_later(*histories) if histories.size == 2
   end
 
   private

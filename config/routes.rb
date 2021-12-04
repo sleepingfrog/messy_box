@@ -31,7 +31,11 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :entries, only: %i[ index show ]
+  resources :entries, only: %i[ index show ] do
+    member do
+      post 'create_history', action: :create_history
+    end
+  end
   resources :histories, only: %i[ show ]
 
   if Rails.env.development?
