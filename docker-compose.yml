@@ -40,11 +40,16 @@ x-backend: &backend
     REDIS_URL: redis://redis:6379
     SELENIUM_HUB_URL: http://selenium-hub:4444/wd/hub
   depends_on:
-    - postgres
-    - es
-    - redis
-    - minio
-    - selenium-hub
+    postgres:
+      condition: service_started
+    es:
+      condition: service_started
+    redis:
+      condition: service_started
+    minio:
+      condition: service_started
+    selenium-hub:
+      condition: service_started
 
 services:
   runner:
