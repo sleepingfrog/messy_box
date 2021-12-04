@@ -6,7 +6,6 @@ environment:
 compose:
   files:
     - docker-compose.yml
-
 interaction:
   sh:
     description: Open a Bash shell within a Rails container (with dependencies up)
@@ -70,6 +69,9 @@ interaction:
     service: redis
     command: redis-cli -h redis
 
+  mc:
+    service: mc
+
 provision:
   - dip compose down --volumes
   - dip compose up -d postgres redis es
@@ -77,3 +79,8 @@ provision:
   - dip yarn install
   - dip rake db:setup
   - dip RAILS_ENV=test rails db:create
+  - dip mc config host rm minio_dev
+  - dip mc config host add minio_dev http://minio:9000 minio_access minio_secret
+  - dip mc mb minio_dev/devbucket
+  - dip mc policy set public minio_dev/devbucket
+

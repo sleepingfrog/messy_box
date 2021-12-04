@@ -73,4 +73,6 @@ Rails.application.configure do
   # config.action_cable.disable_request_forgery_protection = true
 
   config.session_store :redis_store, servers: ENV["REDIS_URL"]
+
+  config.active_storage.service = :minio_dev
 end
