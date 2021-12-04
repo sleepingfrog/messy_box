@@ -38,11 +38,13 @@ x-backend: &backend
     ELASTICSEARCH_HOST: es
     ELASTICSEARCH_PORT: 9200
     REDIS_URL: redis://redis:6379
+    SELENIUM_HUB_URL: http://selenium-hub:4444/wd/hub
   depends_on:
     - postgres
     - es
     - redis
     - minio
+    - selenium-hub
 
 services:
   runner:
@@ -167,6 +169,25 @@ services:
       - mc:/root/.mc
     depends_on:
       - minio
+
+  selenium-hub:
+    image: selenium/hub
+    ports:
+      - "4444:4444"
+      - "4442:4442"
+      - "4443:4443"
+    depends_on:
+      - node-firefox
+  node-firefox:
+    image: selenium/node-firefox
+    volumes:
+      - /dev/shm:/dev/shm
+    environment:
+      - HUB_HOST=selenium-hub
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - SE_NODE_MAX_SESSIONS=3
 
 volumes:
   bundle:

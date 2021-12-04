@@ -14,6 +14,10 @@ class Entry < ApplicationRecord
   validates :url, presence: true
   validate :correct_url
 
+  def wait_time
+    wait.presence || 1
+  end
+
   private
 
   def correct_url

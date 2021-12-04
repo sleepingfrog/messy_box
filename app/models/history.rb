@@ -20,4 +20,6 @@ class History < ApplicationRecord
 
   has_one :comparison_with_after, class_name: 'Comparison', foreign_key: :before_id, dependent: :destroy
   has_one :comparison_with_before, class_name: 'Comparison', foreign_key: :after_id, dependent: :destroy
+
+  has_one_attached :image
 end
