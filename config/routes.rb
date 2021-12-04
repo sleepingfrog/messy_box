@@ -2,7 +2,6 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
-
   devise_for :users
   root 'home#index'
 
@@ -31,12 +30,12 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :entries, only: %i[ index show new create ] do
+  resources :entries, only: %i[index show new create] do
     member do
       post 'create_history', action: :create_history
     end
   end
-  resources :histories, only: %i[ show ]
+  resources :histories, only: %i[show]
 
   if Rails.env.development?
     mount Sidekiq::Web => "/sidekiq"

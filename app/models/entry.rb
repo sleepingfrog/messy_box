@@ -20,9 +20,9 @@ class Entry < ApplicationRecord
 
   private
 
-  def correct_url
-    if !URI.regexp(%w[http https]).match?(url) || URI.parse(url).host.blank?
-      errors.add(:url, :invalid)
+    def correct_url
+      if !URI.regexp(%w[http https]).match?(url) || URI.parse(url).host.blank?
+        errors.add(:url, :invalid)
+      end
     end
-  end
 end

@@ -13,11 +13,11 @@ class CreateComparisonJob < ApplicationJob
 
   private
 
-  def compare_image(before, after)
-    image1, image2 = [before, after].map do |history|
-      Magick::Image.from_blob(history.image.blob.download).first
-    end
+    def compare_image(before, after)
+      image1, image2 = [before, after].map do |history|
+        Magick::Image.from_blob(history.image.blob.download).first
+      end
 
-    image1.compare_channel(image2, Magick::MeanSquaredErrorMetric)
-  end
+      image1.compare_channel(image2, Magick::MeanSquaredErrorMetric)
+    end
 end
