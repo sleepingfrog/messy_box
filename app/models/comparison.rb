@@ -22,4 +22,6 @@
 class Comparison < ApplicationRecord
   belongs_to :before, class_name: 'History'
   belongs_to :after, class_name: 'History'
+
+  has_one_attached :image
 end
