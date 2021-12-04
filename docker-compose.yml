@@ -38,10 +38,18 @@ x-backend: &backend
     ELASTICSEARCH_HOST: es
     ELASTICSEARCH_PORT: 9200
     REDIS_URL: redis://redis:6379
+    SELENIUM_HUB_URL: http://selenium-hub:4444/wd/hub
   depends_on:
-    - postgres
-    - es
-    - redis
+    postgres:
+      condition: service_started
+    es:
+      condition: service_started
+    redis:
+      condition: service_started
+    minio:
+      condition: service_started
+    selenium-hub:
+      condition: service_started
 
 services:
   runner:
@@ -126,25 +134,80 @@ services:
     environment:
       <<: *backend_env
       RAILS_ENV: test
-      SELENIUM_HUB_URL: http://selenium:4444/wd/hub
       APP_HOST: system-test
     depends_on:
-      - postgres
-      - es
-      - selenium
-      - redis
-
-  selenium:
-    image: selenium/standalone-chrome-debug
-    volumes:
-      - /dev/shm:/dev/shm
-    ports:
-    - "4444:4444"
-    - "5900:5900"
+      postgres:
+        condition: service_healthy
+      es:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+      selenium-hub:
+        condition: service_healthy
 
   sidekiq:
     <<: *backend
     command: bundle exec sidekiq -C config/sidekiq.yml
+
+  minio:
+    image: minio/minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio:/data
+    environment:
+      MINIO_ROOT_USER: minio_access
+      MINIO_ROOT_PASSWORD: minio_secret
+    command: ["server", "/data", "--console-address", ":9001"]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 10s
+  mc:
+    image: minio/mc
+    volumes:
+      - mc:/root/.mc
+    depends_on:
+      - minio
+
+  selenium-hub:
+    image: selenium/hub
+    ports:
+      - "4444:4444"
+      - "4442:4442"
+      - "4443:4443"
+    depends_on:
+      - node-firefox
+      - node-chrome
+    healthcheck:
+      test: ["CMD", "/opt/bin/check-grid.sh", "--host", "0.0.0.0", "--port", "4444"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  node-firefox:
+    image: selenium/node-firefox
+    volumes:
+      - /dev/shm:/dev/shm
+    environment:
+      - HUB_HOST=selenium-hub
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - SE_NODE_MAX_SESSIONS=3
+
+  node-chrome:
+    image: selenium/node-chrome
+    volumes:
+      - /dev/shm:/dev/shm
+    environment:
+      - HUB_HOST=selenium-hub
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - SE_NODE_MAX_SESSIONS=3
 
 volumes:
   bundle:
@@ -154,3 +217,5 @@ volumes:
   rails_cache:
   redis:
   es:
+  minio:
+  mc:

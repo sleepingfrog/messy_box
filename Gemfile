@@ -61,9 +61,7 @@ end
 group :test do
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara', '>= 2.15'
-  gem 'selenium-webdriver'
   # Easy installation and use of web drivers to run system tests with browsers
-  gem 'webdrivers', require: !ENV['SELENIUM_HUB_URL']
   gem 'minitest-reporters', '~> 1.4'
 end
 
@@ -71,3 +69,8 @@ end
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'redis-rails'
+gem 'aws-sdk-s3', require: false
+gem 'selenium-webdriver'
+gem 'webdrivers', require: !ENV['SELENIUM_HUB_URL']
+gem 'rmagick'
+gem 'image_processing'

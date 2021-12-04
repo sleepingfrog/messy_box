@@ -1,0 +1,16 @@
+<p id="notice"><%= notice %></p>
+<h1><%= @entry.url %></h1>
+
+<%= button_to 'create history', create_history_entry_path(@entry), method: :post %>
+
+<% if @entry.histories.present? %>
+  <ul>
+    <% @entry.histories.each do |history| %>
+      <li>
+        <%= link_to I18n.l(history.created_at, format: :default), history_path(history) %>
+      </li>
+    <% end %>
+  </ul>
+<% end %>
+
+<%= link_to 'Back', entries_path %>

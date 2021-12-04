@@ -1,0 +1,12 @@
+test:
+  service: Dist
+  root: <%= Rails.root.join('tmp', 'storage') %>
+
+minio_dev:
+  service: S3
+  access_key_id: minio_access
+  secret_access_key: minio_secret
+  region: us-east-1
+  endpoint: http://minio:9000
+  bucket: devbucket
+  force_path_style: true
