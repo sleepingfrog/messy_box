@@ -129,21 +129,18 @@ services:
     environment:
       <<: *backend_env
       RAILS_ENV: test
-      SELENIUM_HUB_URL: http://selenium:4444/wd/hub
       APP_HOST: system-test
     depends_on:
-      - postgres
-      - es
-      - selenium
-      - redis
-
-  selenium:
-    image: selenium/standalone-chrome-debug
-    volumes:
-      - /dev/shm:/dev/shm
-    ports:
-    - "4444:4444"
-    - "5900:5900"
+      postgres:
+        condition: service_healthy
+      es:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+      selenium-hub:
+        condition: service_healthy
 
   sidekiq:
     <<: *backend
@@ -178,8 +175,26 @@ services:
       - "4443:4443"
     depends_on:
       - node-firefox
+      - node-chrome
+    healthcheck:
+      test: ["CMD", "/opt/bin/check-grid.sh", "--host", "0.0.0.0", "--port", "4444"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
   node-firefox:
     image: selenium/node-firefox
+    volumes:
+      - /dev/shm:/dev/shm
+    environment:
+      - HUB_HOST=selenium-hub
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - SE_NODE_MAX_SESSIONS=3
+
+  node-chrome:
+    image: selenium/node-chrome
     volumes:
       - /dev/shm:/dev/shm
     environment:
