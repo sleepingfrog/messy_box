@@ -19,7 +19,8 @@ module Mutations
       # need some validation
       page = nil
       Page.transaction do
-        page = Page.lock.joins(chapter: :book).find_by(number: pageNumber, chapters: { position: chapterPosition, books: { id: bookId } })
+        page = Page.lock.joins(chapter: :book)
+          .find_by(number: pageNumber, chapters: { position: chapterPosition, books: { id: bookId } })
 
         new_frames = []
         frames.each do |frame_param|
@@ -29,11 +30,15 @@ module Mutations
           new_frames << frame
         end
 
-        if new_frames.any? { |frame| (page.page_size.width < frame.x + frame.frame_size.width) || (page.page_size.height < frame.y + frame.frame_size.height) }
+        if new_frames.any? do |frame|
+             (page.page_size.width < frame.x + frame.frame_size.width) || (page.page_size.height < frame.y + frame.frame_size.height)
+           end
           raise ActiveRecord::RecordNotSaved
         end
 
-        if new_frames.combination(2).any? { |(frame, other)| (frame.x <= other.x + other.frame_size.width - 1) && (frame.y <= other.y + other.frame_size.height - 1) && (other.x <= frame.x + frame.frame_size.width - 1) && (other.y <= frame.y + frame.frame_size.height - 1) }
+        if new_frames.combination(2).any? do |(frame, other)|
+             (frame.x <= other.x + other.frame_size.width - 1) && (frame.y <= other.y + other.frame_size.height - 1) && (other.x <= frame.x + frame.frame_size.width - 1) && (other.y <= frame.y + frame.frame_size.height - 1)
+           end
           raise ActiveRecord::RecordNotSaved
         end
 

@@ -64,10 +64,14 @@ print_seed('book') do
   book.save!
 
   [
-    { frame_size: FrameSize.find_by_name('size1'), text: 'frame1', color: '#ff0000', page: book.pages.first, x: 1, y: 1 },
-    { frame_size: FrameSize.find_by_name('size2'), text: 'frame2', color: '#00ff00', page: book.pages.first, x: 3, y: 3 },
-    { frame_size: FrameSize.find_by_name('size3'), text: 'frame3', color: '#0000ff', page: book.pages.second, x: 1, y: 1 },
-    { frame_size: FrameSize.find_by_name('size4'), text: 'frame4', color: '#ff0000', page: book.pages.second, x: 0, y: 3 },
+    { frame_size: FrameSize.find_by_name('size1'), text: 'frame1', color: '#ff0000', page: book.pages.first, x: 1,
+      y: 1 },
+    { frame_size: FrameSize.find_by_name('size2'), text: 'frame2', color: '#00ff00', page: book.pages.first, x: 3,
+      y: 3 },
+    { frame_size: FrameSize.find_by_name('size3'), text: 'frame3', color: '#0000ff', page: book.pages.second, x: 1,
+      y: 1 },
+    { frame_size: FrameSize.find_by_name('size4'), text: 'frame4', color: '#ff0000', page: book.pages.second, x: 0,
+      y: 3 },
     { frame_size: FrameSize.find_by_name('size5'), text: 'frame5', color: '#00ff00' },
     { frame_size: FrameSize.find_by_name('size6'), text: 'frame6', color: '#0000ff' },
     { frame_size: FrameSize.find_by_name('size7'), text: 'frame7', color: '#ff0000' },

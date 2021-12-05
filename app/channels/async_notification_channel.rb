@@ -1,6 +1,6 @@
 class AsyncNotificationChannel < ApplicationCable::Channel
   def subscribed
-    stream_from 'async_notification'
+    stream_from('async_notification')
   end
 
   def unsubscribed

@@ -1,7 +1,7 @@
 module MarginaliaOperationName
   def self.included(base_class)
     base_class.class_eval do
-      around_action CallBacks.new
+      around_action(CallBacks.new)
     end
   end
 
