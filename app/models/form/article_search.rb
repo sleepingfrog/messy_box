@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Form
   class ArticleSearch
     include ActiveModel::Model

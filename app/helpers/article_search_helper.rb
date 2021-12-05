@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module ArticleSearchHelper
   def article_search_pagination(result, options = {}, &block)
     ArticleSearchPaginator.new(result, options).render(&block)
