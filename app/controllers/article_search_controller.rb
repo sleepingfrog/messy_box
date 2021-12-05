@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class ArticleSearchController < ApplicationController
   def index
     @search_form = Form::ArticleSearch.new(search_params)

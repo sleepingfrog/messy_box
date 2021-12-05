@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class EntriesController < ApplicationController
   before_action :set_entry, only: %i[show create_history]
   def index

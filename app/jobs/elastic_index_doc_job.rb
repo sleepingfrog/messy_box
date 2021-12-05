@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class ElasticIndexDocJob < ApplicationJob
   queue_as :default
 
