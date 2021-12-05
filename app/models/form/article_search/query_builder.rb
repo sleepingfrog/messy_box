@@ -14,14 +14,14 @@ module Form
         queyr = if query_values.size > 1
           {
             bool: {
-              must: query_values
-            }
+              must: query_values,
+            },
           }
         elsif query_values.size == 1
           query_values.first
         else
           {
-            match_all: {}
+            match_all: {},
           }
         end
       end
@@ -38,7 +38,7 @@ module Form
               type: 'cross_fields',
               operator: 'and',
               query: conditions[:query],
-            }
+            },
           }
         end
       end
@@ -48,8 +48,8 @@ module Form
         if tags_value.present?
           {
             terms: {
-              "tags.name": tags_value
-            }
+              "tags.name": tags_value,
+            },
           }
         end
       end

@@ -15,10 +15,9 @@ module Marginalia
       self.graphql_operation = nil
     end
 
-    private
-      def self.graphql_operation=(operation_name)
-        Thread.current[:marginalia_graphql_operation] = operation_name
-      end
+    def self.graphql_operation=(operation_name)
+      Thread.current[:marginalia_graphql_operation] = operation_name
+    end
   end
 end
 
