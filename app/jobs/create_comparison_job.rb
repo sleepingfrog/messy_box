@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class CreateComparisonJob < ApplicationJob
   queue_as :default
 
