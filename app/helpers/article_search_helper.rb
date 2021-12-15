@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module ArticleSearchHelper
   def article_search_pagination(result, options = {}, &block)
     ArticleSearchPaginator.new(result, options).render(&block)
@@ -5,13 +6,13 @@ module ArticleSearchHelper
 
   class ArticleSearchPaginator
     attr_reader :result, :options, :search_form
-    def initialize(search_form, options = {}, &block)
+    def initialize(search_form, options = {})
       @search_form = search_form
       @result = search_form.result
       @options = options
     end
 
-    def render(&block)
+    def render
       yield self
     end
 
@@ -76,90 +77,88 @@ module ArticleSearchHelper
 
     private
 
-    def total_count
-      result.response.dig('hits', 'total', 'value')
-    end
+      def total_count
+        result.response.dig('hits', 'total', 'value')
+      end
 
-    def from
-      from = result.search.definition.dig(:body, :from)
-    end
+      def from
+        from = result.search.definition.dig(:body, :from)
+      end
 
-    def size
-      size = result.search.definition.dig(:body, :size)
-    end
+      def size
+        size = result.search.definition.dig(:body, :size)
+      end
 
-    def current_page
-      ( from / size ) + 1
-    end
+      def current_page
+        (from / size) + 1
+      end
 
-    def last_page_number
-      total_count.fdiv(size).ceil
-    end
+      def last_page_number
+        total_count.fdiv(size).ceil
+      end
 
-    DEFAULT_OPTIONS = {
-      first_page: true,
-      last_page: true,
-      prev_page: true,
-      next_page: true,
-      surround: 5,
-    }
-    def options
-      DEFAULT_OPTIONS.merge(@options).merge({
-        form_conditions: form_conditions,
-        current_page: current_page,
-        last_page_number: last_page_number
-      })
-    end
-
-
-    def form_conditions
-      search_form.attributes
-    end
-
-
-    class Page
-      attr_reader :number, :form_conditions, :options
-      def initialize(number, options)
-        @number = number
-        @form_conditions = options.delete(:form_conditions)
-        @options = options
+      DEFAULT_OPTIONS = {
+        first_page: true,
+        last_page: true,
+        prev_page: true,
+        next_page: true,
+        surround: 5,
+      }
+      def options
+        DEFAULT_OPTIONS.merge(@options).merge({
+          form_conditions: form_conditions,
+          current_page: current_page,
+          last_page_number: last_page_number,
+        })
       end
 
       def form_conditions
-        @form_conditions.merge("page" => number)
+        search_form.attributes
       end
 
-      def last?
-        options[:last_page_number] == number
-      end
-
-      def first?
-        number == 1
-      end
-
-      def current?
-        options[:current_page] == number
-      end
-
-      def in_surround?
-        if options[:current_page] - 1  < options[:surround] / 2
-          number <= options[:surround]
-        elsif options[:last_page_number] - options[:current_page] < options[:surround] / 2
-          options[:last_page_number] - number <= options[:surround]
-        else
-          (options[:current_page] - number).abs < (options[:surround] / 2) + 1
-        end
-      end
-
-      [:prev_page, :next_page, :first_page, :last_page].each do |key|
-        define_method(:"as_#{key}!") do
-          @as = key
+      class Page
+        attr_reader :number, :form_conditions, :options
+        def initialize(number, options)
+          @number = number
+          @form_conditions = options.delete(:form_conditions)
+          @options = options
         end
 
-        define_method(:"as_#{key}?") do
-          @as == key
+        def form_conditions
+          @form_conditions.merge("page" => number)
+        end
+
+        def last?
+          options[:last_page_number] == number
+        end
+
+        def first?
+          number == 1
+        end
+
+        def current?
+          options[:current_page] == number
+        end
+
+        def in_surround?
+          if options[:current_page] - 1 < options[:surround] / 2
+            number <= options[:surround]
+          elsif options[:last_page_number] - options[:current_page] < options[:surround] / 2
+            options[:last_page_number] - number <= options[:surround]
+          else
+            (options[:current_page] - number).abs < (options[:surround] / 2) + 1
+          end
+        end
+
+        [:prev_page, :next_page, :first_page, :last_page].each do |key|
+          define_method(:"as_#{key}!") do
+            @as = key
+          end
+
+          define_method(:"as_#{key}?") do
+            @as == key
+          end
         end
       end
-    end
   end
 end
