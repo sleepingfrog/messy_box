@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class ArticleSearchController < ApplicationController
   def index
     @search_form = Form::ArticleSearch.new(search_params)
@@ -7,7 +8,7 @@ class ArticleSearchController < ApplicationController
 
   private
 
-  def search_params
-    params.fetch(:article_search, {}).permit(:query, :page, :size, tags: [])
-  end
+    def search_params
+      params.fetch(:article_search, {}).permit(:query, :page, :size, tags: [])
+    end
 end
