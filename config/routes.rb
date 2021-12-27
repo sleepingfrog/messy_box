@@ -37,6 +37,16 @@ Rails.application.routes.draw do
   end
   resources :histories, only: %i[show]
 
+
+  resources :csvs, only: %i[index] do
+    collection do
+      defaults format: :csv do
+        get "one", action: :one
+        get "two", action: :two
+      end
+    end
+  end
+
   if Rails.env.development?
     mount Sidekiq::Web => "/sidekiq"
     mount GraphiQL::Rails::Engine, at: "/graphiql", graphql_path: "/graphql"
